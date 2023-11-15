@@ -13,6 +13,7 @@ import com.romys.models.ProductModel;
 import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import java.util.List;
@@ -38,6 +39,28 @@ public class ProductService {
         }
 
         public ArrayList<ElasticHit<ProductModel>> getProductByid(String id) throws IOException {
+                GetResponse<ProductModel> response = this.client.get(
+                                get -> get.index(this.products).id(id),
+                                ProductModel.class);
+
+                if (!response.found())
+                        throw new ProductException("surat not found");
+
+                return new ArrayList<>(List
+                                .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
+
+        }
+
+        public ArrayList<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {
+                this.client.create(request -> request.index(this.products).id(Integer.toString(product.getId()))
+                                .document(product)
+                                .refresh(Refresh.True))
+                                .result();
+
+                return null;
+        }
+
+        public ArrayList<ElasticHit<ProductModel>> deleteProductByid(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),
                                 ProductModel.class);
