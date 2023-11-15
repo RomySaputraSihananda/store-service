@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.romys.models.ProductModel;
+import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -21,11 +22,13 @@ public class ProductService {
     @Value("${service.elastic.index.products}")
     private String products;
 
-    public ArrayList<ProductModel> getProducts() throws IOException {
+    public ArrayList<ElasticHit<ProductModel>> getProducts() throws IOException {
         SearchResponse<ProductModel> response = this.client.search(search -> search.index(this.products),
                 ProductModel.class);
 
         return new ArrayList<>(
-                response.hits().hits().stream().map(surat -> surat.source()).collect(Collectors.toList()));
+                response.hits().hits().stream()
+                        .map(product -> new ElasticHit<ProductModel>(product.id(), product.index(), product.source()))
+                        .collect(Collectors.toList()));
     }
 }

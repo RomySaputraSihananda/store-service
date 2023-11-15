@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romys.models.ProductModel;
+import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
 import com.romys.services.ProductService;
 
@@ -20,7 +21,7 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping
-    public ResponseEntity<BodyResponse<ProductModel>> getAll() throws IOException {
+    public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getAll() throws IOException {
         return new ResponseEntity<>(
                 new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products", this.service.getProducts()),
                 HttpStatus.OK);
