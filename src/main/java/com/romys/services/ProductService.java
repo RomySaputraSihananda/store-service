@@ -60,7 +60,7 @@ public class ProductService {
                 return null;
         }
 
-        public ArrayList<ElasticHit<ProductModel>> deleteProductByid(String id) throws IOException {
+        public ArrayList<ElasticHit<ProductModel>> deleteProduct(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),
                                 ProductModel.class);
@@ -68,8 +68,7 @@ public class ProductService {
                 if (!response.found())
                         throw new ProductException("surat not found");
 
-                return new ArrayList<>(List
-                                .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
-
+                this.client.delete(delete -> delete.index(this.products).id(id));
+                return null;
         }
 }

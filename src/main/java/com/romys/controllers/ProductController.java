@@ -71,7 +71,7 @@ public class ProductController {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success deleted", id),
-                                                this.service.getProducts()),
+                                                this.service.deleteProduct(id)),
                                 HttpStatus.OK);
         }
 }
