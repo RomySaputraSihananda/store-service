@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.romys.exceptions.ProductException;
 import com.romys.models.ProductModel;
 import com.romys.payloads.hit.ElasticHit;
 
@@ -40,8 +41,9 @@ public class ProductService {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),
                                 ProductModel.class);
-                // if (!response.found())
-                // throw new AlquranException("surat not found");
+
+                if (!response.found())
+                        throw new ProductException("surat not found");
 
                 return new ArrayList<>(List
                                 .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
