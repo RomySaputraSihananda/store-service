@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.romys.models.UserModel;
+import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -21,11 +22,12 @@ public class UserService {
     @Value("${service.elastic.index.users}")
     private String users;
 
-    public ArrayList<UserModel> getUsers() throws IOException {
+    public ArrayList<ElasticHit<UserModel>> getUsers() throws IOException {
         SearchResponse<UserModel> response = this.client.search(search -> search.index(this.users),
                 UserModel.class);
 
         return new ArrayList<>(
-                response.hits().hits().stream().map(surat -> surat.source()).collect(Collectors.toList()));
+                response.hits().hits().stream().map(user -> new ElasticHit<>(user.id(), user.index(), user.source()))
+                        .collect(Collectors.toList()));
     }
 }

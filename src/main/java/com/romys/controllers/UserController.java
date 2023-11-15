@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romys.models.UserModel;
+import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
 import com.romys.services.UserService;
 
@@ -20,7 +21,7 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<BodyResponse<UserModel>> getAll() throws IOException {
+    public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getAll() throws IOException {
         return new ResponseEntity<>(
                 new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products", this.service.getUsers()),
                 HttpStatus.OK);
