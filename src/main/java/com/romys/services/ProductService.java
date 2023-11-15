@@ -60,6 +60,29 @@ public class ProductService {
                 return null;
         }
 
+        public ArrayList<ElasticHit<ProductModel>> updateProduct(ProductModel product, String id) throws IOException {
+                ElasticHit<ProductModel> hit = this.getProductByid(id).get(0);
+
+                hit.source().setId(product.getId());
+                hit.source().setTitle(product.getTitle());
+                hit.source().setDescription(product.getDescription());
+                hit.source().setPrice(product.getPrice());
+                hit.source().setDiscountPercentage(product.getDiscountPercentage());
+                hit.source().setRating(product.getRating());
+                hit.source().setStock(product.getStock());
+                hit.source().setBrand(product.getBrand());
+                hit.source().setCategory(product.getCategory());
+                hit.source().setThumbnail(product.getThumbnail());
+                hit.source().setImages(product.getImages());
+
+                this.client.update(
+                                update -> update.index(this.products).id(hit.id()).doc(hit.source())
+                                                .refresh(Refresh.True),
+                                ProductModel.class);
+
+                return new ArrayList<>(List.of(hit));
+        }
+
         public ArrayList<ElasticHit<ProductModel>> deleteProduct(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),

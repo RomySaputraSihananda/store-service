@@ -47,4 +47,17 @@ public class UserService {
                                 .of(new ElasticHit<UserModel>(response.id(), response.index(), response.source())));
 
         }
+
+        public ArrayList<ElasticHit<UserModel>> createUser(UserModel user) {
+                return null;
+        }
+
+        public ArrayList<ElasticHit<UserModel>> updateUser(UserModel user, String id) {
+                return null;
+        }
+
+        public ArrayList<ElasticHit<UserModel>> deleteUser(UserModel user) {
+                return null;
+        }
+
 }
