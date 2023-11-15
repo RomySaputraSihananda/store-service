@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,14 @@ public class UserController {
     public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getAll() throws IOException {
         return new ResponseEntity<>(
                 new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products", this.service.getUsers()),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(
+                new BodyResponse<>("ok", HttpStatus.OK.value(), String.format("data of users by id %s", id),
+                        this.service.getUserByid(id)),
                 HttpStatus.OK);
     }
 }
