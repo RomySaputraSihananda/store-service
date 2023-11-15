@@ -16,18 +16,19 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 
 @Service
 public class UserService {
-    @Autowired
-    private ElasticsearchClient client;
+        @Autowired
+        private ElasticsearchClient client;
 
-    @Value("${service.elastic.index.users}")
-    private String users;
+        @Value("${service.elastic.index.users}")
+        private String users;
 
-    public ArrayList<ElasticHit<UserModel>> getUsers() throws IOException {
-        SearchResponse<UserModel> response = this.client.search(search -> search.index(this.users),
-                UserModel.class);
+        public ArrayList<ElasticHit<UserModel>> getUsers() throws IOException {
+                SearchResponse<UserModel> response = this.client.search(search -> search.index(this.users),
+                                UserModel.class);
 
-        return new ArrayList<>(
-                response.hits().hits().stream().map(user -> new ElasticHit<>(user.id(), user.index(), user.source()))
-                        .collect(Collectors.toList()));
-    }
+                return new ArrayList<>(
+                                response.hits().hits().stream()
+                                                .map(user -> new ElasticHit<>(user.id(), user.index(), user.source()))
+                                                .collect(Collectors.toList()));
+        }
 }
