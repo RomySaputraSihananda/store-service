@@ -21,8 +21,8 @@ public class ProductService {
     @Value("${service.elastic.index.products}")
     private String products;
 
-    public ArrayList<?> getProducts() throws IOException {
-        SearchResponse<?> response = this.client.search(search -> search.index(this.products),
+    public ArrayList<ProductModel> getProducts() throws IOException {
+        SearchResponse<ProductModel> response = this.client.search(search -> search.index(this.products),
                 ProductModel.class);
 
         return new ArrayList<>(

@@ -21,8 +21,8 @@ public class UserService {
     @Value("${service.elastic.index.users}")
     private String users;
 
-    public ArrayList<?> getUsers() throws IOException {
-        SearchResponse<?> response = this.client.search(search -> search.index(this.users),
+    public ArrayList<UserModel> getUsers() throws IOException {
+        SearchResponse<UserModel> response = this.client.search(search -> search.index(this.users),
                 UserModel.class);
 
         return new ArrayList<>(
