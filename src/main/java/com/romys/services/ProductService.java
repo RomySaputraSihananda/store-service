@@ -17,6 +17,7 @@ import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -44,7 +45,7 @@ public class ProductService {
                                 ProductModel.class);
 
                 if (!response.found())
-                        throw new ProductException("surat not found");
+                        throw new ProductException("product not found");
 
                 return new ArrayList<>(List
                                 .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
@@ -52,8 +53,10 @@ public class ProductService {
         }
 
         public ArrayList<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {
-                this.client.create(request -> request.index(this.products).id(Integer.toString(product.getId()))
-                                .document(product)
+                String id = UUID.randomUUID().toString();
+
+                this.client.create(request -> request.index(this.products).document(product)
+                                .id(id)
                                 .refresh(Refresh.True))
                                 .result();
 
@@ -63,7 +66,6 @@ public class ProductService {
         public ArrayList<ElasticHit<ProductModel>> updateProduct(ProductModel product, String id) throws IOException {
                 ElasticHit<ProductModel> hit = this.getProductByid(id).get(0);
 
-                hit.source().setId(product.getId());
                 hit.source().setTitle(product.getTitle());
                 hit.source().setDescription(product.getDescription());
                 hit.source().setPrice(product.getPrice());
@@ -89,7 +91,7 @@ public class ProductService {
                                 ProductModel.class);
 
                 if (!response.found())
-                        throw new ProductException("surat not found");
+                        throw new ProductException("product not found");
 
                 this.client.delete(delete -> delete.index(this.products).id(id));
                 return null;
