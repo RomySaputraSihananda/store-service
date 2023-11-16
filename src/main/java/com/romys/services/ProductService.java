@@ -14,7 +14,6 @@ import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Refresh;
-import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 
@@ -72,12 +71,10 @@ public class ProductService {
         public List<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {
                 String id = UUID.randomUUID().toString();
 
-                Result res = this.client.create(request -> request.index(this.products).document(product)
+                this.client.create(request -> request.index(this.products).document(product)
                                 .id(id)
                                 .refresh(Refresh.True))
                                 .result();
-
-                System.out.println(res.toString());
 
                 return this.getProductByid(id);
         }
