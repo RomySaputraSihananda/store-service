@@ -1,6 +1,6 @@
 package com.romys.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 
@@ -15,5 +15,5 @@ public class ProductModel {
     public String brand;
     public String category;
     public String thumbnail;
-    public ArrayList<String> images;
+    public List<String> images;
 }

@@ -14,6 +14,7 @@ import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Refresh;
+import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ProductService {
         @Value("${service.elastic.index.products}")
         private String products;
 
-        public ArrayList<ElasticHit<ProductModel>> getProducts() throws IOException {
+        public List<ElasticHit<ProductModel>> getProducts() throws IOException {
                 SearchResponse<ProductModel> response = this.client.search(search -> search.index(this.products),
                                 ProductModel.class);
 
@@ -39,7 +40,7 @@ public class ProductService {
                                                 .collect(Collectors.toList()));
         }
 
-        public ArrayList<ElasticHit<ProductModel>> getProductByid(String id) throws IOException {
+        public List<ElasticHit<ProductModel>> getProductByid(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),
                                 ProductModel.class);
@@ -49,21 +50,22 @@ public class ProductService {
 
                 return new ArrayList<>(List
                                 .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
-
         }
 
-        public ArrayList<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {
+        public List<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {
                 String id = UUID.randomUUID().toString();
 
-                this.client.create(request -> request.index(this.products).document(product)
+                Result res = this.client.create(request -> request.index(this.products).document(product)
                                 .id(id)
                                 .refresh(Refresh.True))
                                 .result();
 
-                return null;
+                System.out.println(res.toString());
+
+                return this.getProductByid(id);
         }
 
-        public ArrayList<ElasticHit<ProductModel>> updateProduct(ProductModel product, String id) throws IOException {
+        public List<ElasticHit<ProductModel>> updateProduct(ProductModel product, String id) throws IOException {
                 ElasticHit<ProductModel> hit = this.getProductByid(id).get(0);
 
                 hit.source().setTitle(product.getTitle());
@@ -85,7 +87,7 @@ public class ProductService {
                 return new ArrayList<>(List.of(hit));
         }
 
-        public ArrayList<ElasticHit<ProductModel>> deleteProduct(String id) throws IOException {
+        public List<ElasticHit<ProductModel>> deleteProduct(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),
                                 ProductModel.class);

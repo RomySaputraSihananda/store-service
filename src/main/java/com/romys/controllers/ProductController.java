@@ -1,7 +1,7 @@
 package com.romys.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,7 +56,7 @@ public class ProductController {
         @PostMapping
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> addData(
                         @RequestBody(required = true) ProductModel product) throws IOException {
-                ArrayList<ElasticHit<ProductModel>> response = this.service.createProduct(product);
+                List<ElasticHit<ProductModel>> response = this.service.createProduct(product);
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.CREATED.value(),
