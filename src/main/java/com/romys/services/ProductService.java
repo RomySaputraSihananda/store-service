@@ -17,6 +17,7 @@ import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +51,22 @@ public class ProductService {
 
                 return new ArrayList<>(List
                                 .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
+        }
+
+        public List<ElasticHit<ProductModel>> searchProduct(String field, String value) throws IOException {
+                SearchResponse<ProductModel> response = this.client.search(search -> search
+                                .index(this.products)
+                                .query(query -> query
+                                                .bool(bool -> bool
+                                                                .must(must -> must
+                                                                                .matchPhrasePrefix(match -> match
+                                                                                                .field(field)
+                                                                                                .query(value))))),
+                                ProductModel.class);
+
+                return response.hits().hits().stream().map(
+                                product -> new ElasticHit<>(product.id(), product.index(), product.source()))
+                                .collect(Collectors.toList());
         }
 
         public List<ElasticHit<ProductModel>> createProduct(ProductModel product) throws IOException {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -47,6 +48,20 @@ public class ProductController {
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("data of products by id %s", id),
                                                 this.service.getProductByid(id)),
+                                HttpStatus.OK);
+        }
+
+        /*
+         * get data by name
+         */
+        @GetMapping("/search")
+        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getByName(
+                        @RequestParam(required = true) String field, @RequestParam(required = true) String value)
+                        throws IOException {
+                return new ResponseEntity<>(
+                                new BodyResponse<>("ok", HttpStatus.OK.value(),
+                                                String.format("data of products by value %s on field %s", value, field),
+                                                this.service.searchProduct(field, value)),
                                 HttpStatus.OK);
         }
 
