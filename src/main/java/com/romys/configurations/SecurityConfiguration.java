@@ -18,7 +18,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/docs/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/*").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll())
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v1/**").permitAll())
                 .build());
     }
 }
