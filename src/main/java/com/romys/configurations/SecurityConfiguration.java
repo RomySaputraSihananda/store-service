@@ -14,12 +14,14 @@ public class SecurityConfiguration {
         return (http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/docs").permitAll()
-                        .requestMatchers("/docs/swagger-ui/**").permitAll()
-                        .requestMatchers("/swagger-resources/*").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/**").permitAll())
+                        .requestMatchers("/docs",
+                                "/docs/swagger-ui/**",
+                                "/swagger-resources/*",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api/v1/**")
+                        .permitAll())
+                // .authorizeHttpRequests(auth -> auth.requestMatchers("//"))
                 .build());
     }
 }

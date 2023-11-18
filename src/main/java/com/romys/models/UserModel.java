@@ -37,7 +37,7 @@ public class UserModel {
     private String userAgent;
 
     public UserModel(UserDTO user) {
-        this.role = user.getRole();
+        this.role = "USER";
         this.username = user.getUsername();
         this.password = user.getPassword();
     }
