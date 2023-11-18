@@ -1,6 +1,7 @@
 package com.romys.models;
 
 import com.romys.DTOs.UserDTO;
+import com.romys.enums.Role;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserModel {
-    private String role;
+    private Role role;
     private String firstName;
     private String lastName;
     private String maidenName;
@@ -37,7 +38,7 @@ public class UserModel {
     private String userAgent;
 
     public UserModel(UserDTO user) {
-        this.role = "USER";
+        this.role = Role.USER;
         this.username = user.getUsername();
         this.password = user.getPassword();
     }
