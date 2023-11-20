@@ -43,15 +43,11 @@ public class AuthController {
         @Autowired
         private JwtService jwtService;
 
-        @Autowired
-        private UserDetailsService userDetailsService;
-
         private String builder(HttpServletResponse response, String username, String password)
                         throws AuthenticationException {
                 Authentication authentication = this.authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(username, password));
                 if (authentication.isAuthenticated()) {
-                        UserDetails user = this.userDetailsService.loadUserByUsername(username);
                         String token = this.jwtService.generateToken(username);
                         response.setHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s",
                                         token));
@@ -69,10 +65,8 @@ public class AuthController {
                         @RequestBody(required = true) UserDTO user, HttpServletResponse response)
                         throws AuthenticationException {
 
-                System.out.println(response);
-
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", 200, "ok",
+                                new BodyResponse<>("ok", 200, "success login",
                                                 new TokenResponse(this.builder(response, user.getUsername(),
                                                                 user.getPassword()))),
                                 HttpStatus.OK);
@@ -89,7 +83,7 @@ public class AuthController {
 
                 return new ResponseEntity<>(
                                 new BodyResponses<>("ok", HttpStatus.CREATED.value(),
-                                                String.format("product with id success created"), response),
+                                                String.format("new user success created"), response),
                                 HttpStatus.CREATED);
         }
 }
