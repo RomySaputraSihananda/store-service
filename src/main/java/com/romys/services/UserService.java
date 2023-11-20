@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.romys.models.ProductModel;
 import com.romys.models.UserModel;
 import com.romys.DTOs.UserDTO;
 import com.romys.DTOs.UserDetailDTO;

@@ -55,7 +55,7 @@ public class UserController {
                                 new BodyResponse<>(
                                                 HttpStatus.OK.getReasonPhrase(),
                                                 HttpStatus.OK.value(),
-                                                String.format("success update info %s", hit.id()),
+                                                String.format("success update info %s", hit.source().getUsername()),
                                                 service.updateUser(userDetail, hit, request)),
                                 HttpStatus.OK);
         }
