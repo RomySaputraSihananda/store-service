@@ -23,6 +23,7 @@ import com.romys.payloads.responses.BodyResponse;
 import com.romys.services.JwtService;
 import com.romys.services.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -38,6 +39,7 @@ public class ProductController {
          * get all data
          */
         @GetMapping
+        @Operation(summary = "Get all products", description = "API for get all products")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getAll() throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products",
@@ -49,6 +51,7 @@ public class ProductController {
          * get data by id
          */
         @GetMapping("/{id}")
+        @Operation(summary = "Get product by id", description = "API for get product by id")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getById(@PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
@@ -62,6 +65,7 @@ public class ProductController {
          * get data by name
          */
         @GetMapping("/search")
+        @Operation(summary = "Get product by name", description = "API for get product by name")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getByName(
                         @RequestParam(required = true) String field, @RequestParam(required = true) String value)
                         throws IOException {
@@ -76,6 +80,7 @@ public class ProductController {
          * create data
          */
         @PostMapping
+        @Operation(summary = "Create new product", description = "API for create new product")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> addData(
                         @RequestBody(required = true) ProductModel product) throws IOException {
                 List<ElasticHit<ProductModel>> response = this.service.createProduct(product);
@@ -91,6 +96,7 @@ public class ProductController {
          * update data
          */
         @PutMapping("/{id}")
+        @Operation(summary = "Update product", description = "API for update product")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> updateData(@PathVariable String id,
                         @RequestBody(required = true) ProductModel product)
                         throws IOException {
@@ -105,6 +111,7 @@ public class ProductController {
          * delete data
          */
         @DeleteMapping("/{id}")
+        @Operation(summary = "Delete product", description = "API for delete product")
         public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> deleteData(@PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
@@ -115,6 +122,7 @@ public class ProductController {
         }
 
         @GetMapping("/test")
+        @Operation(summary = "4 test", description = "4 test")
         public String fortest(HttpServletRequest request)
                         throws IOException {
                 String token = request.getHeader(HttpHeaders.AUTHORIZATION);
