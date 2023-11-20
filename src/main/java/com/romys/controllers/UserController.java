@@ -36,13 +36,13 @@ public class UserController {
     @Operation(summary = "Get info self", description = "API for get info self")
     public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getSelfInfo(HttpServletRequest request)
             throws IOException {
-        String username = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String username = this.jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
 
         return new ResponseEntity<>(
                 new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
                         String.format("all data from %s", username),
                         this.service.getUserByName(
-                                this.jwtService.extractUsername(username))),
+                                username)),
                 HttpStatus.OK);
     }
 
@@ -51,6 +51,8 @@ public class UserController {
     public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
             HttpServletRequest request) throws IOException {
         String username = request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println(request.getHeader(HttpHeaders.USER_AGENT));
+        System.out.println(this.getClientIP(request));
 
         return new ResponseEntity<>(
                 new BodyResponse<>(
@@ -59,5 +61,15 @@ public class UserController {
                         String.format("success update info %s", username),
                         null),
                 HttpStatus.OK);
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+
+        if (xForwardedForHeader == null) {
+            return request.getRemoteAddr();
+        }
+
+        return xForwardedForHeader.split(",")[0].trim();
     }
 }
