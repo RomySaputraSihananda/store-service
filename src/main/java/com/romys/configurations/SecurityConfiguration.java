@@ -73,9 +73,8 @@ public class SecurityConfiguration {
                                                 .permitAll())
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/api/v1/product/**")
-                                                .permitAll()
-                                                .anyRequest()
-                                                .authenticated())
+                                                .authenticated()
+                                                .anyRequest())
                                 .authenticationProvider(this.authenticationProvider())
                                 .addFilterBefore(jwtAuthenticationFilter,
                                                 UsernamePasswordAuthenticationFilter.class)
