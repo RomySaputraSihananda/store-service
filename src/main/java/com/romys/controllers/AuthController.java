@@ -64,7 +64,8 @@ public class AuthController {
                         throws AuthenticationException {
 
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", 200, "success login",
+                                new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                                                "success login",
                                                 new TokenResponse(this.builder(response, user.getUsername(),
                                                                 user.getPassword()))),
                                 HttpStatus.OK);
@@ -80,7 +81,7 @@ public class AuthController {
                 List<ElasticHit<UserModel>> response = this.service.createUser(user);
 
                 return new ResponseEntity<>(
-                                new BodyResponses<>("ok", HttpStatus.CREATED.value(),
+                                new BodyResponses<>(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(),
                                                 String.format("new user success created"), response),
                                 HttpStatus.CREATED);
         }

@@ -36,13 +36,12 @@ public class UserController {
         @Operation(summary = "Get info self", description = "API for get info self")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getSelfInfo(HttpServletRequest request)
                         throws IOException {
-                String username = this.jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+                ElasticHit<UserModel> user = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                                                String.format("all data from %s", username),
-                                                this.service.getUserByUsername(
-                                                                username)),
+                                                String.format("all data from %s", user.source().getUsername()),
+                                                user),
                                 HttpStatus.OK);
         }
 
@@ -50,7 +49,7 @@ public class UserController {
         @Operation(summary = "Update info self", description = "API for update info self")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
-                ElasticHit<UserModel> user = this.jwtService.getUser(HttpHeaders.AUTHORIZATION);
+                ElasticHit<UserModel> user = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>(
