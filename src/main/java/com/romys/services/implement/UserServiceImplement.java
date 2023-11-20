@@ -17,7 +17,7 @@ import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.services.UserService;
 
-import lombok.Data;
+import lombok.Getter;
 
 @Service
 public class UserServiceImplement implements UserDetailsService {
@@ -33,7 +33,7 @@ public class UserServiceImplement implements UserDetailsService {
         }
     }
 
-    @Data
+    @Getter
     public class UserDetailsImplement implements UserDetails {
         private String id;
         private Role role;
@@ -55,22 +55,22 @@ public class UserServiceImplement implements UserDetailsService {
 
         @Override
         public boolean isAccountNonExpired() {
-            return (true);
+            return true;
         }
 
         @Override
         public boolean isAccountNonLocked() {
-            return (true);
+            return true;
         }
 
         @Override
         public boolean isCredentialsNonExpired() {
-            return (true);
+            return true;
         }
 
         @Override
         public boolean isEnabled() {
-            return (true);
+            return true;
         }
     }
 

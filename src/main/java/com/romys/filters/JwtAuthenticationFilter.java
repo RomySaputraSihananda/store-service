@@ -8,12 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.romys.services.JwtService;
-import com.romys.services.implement.UserServiceImplement;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserServiceImplement userServiceImplement;
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (username != null) {
                 if (context.getAuthentication() == null) {
-                    UserDetails user = this.userServiceImplement.loadUserByUsername(username);
+                    UserDetails user = this.userDetailsService.loadUserByUsername(username);
 
                     if (jwtService.isValid(token, user)) {
                         System.out.println("\033[1;32mValid\033[1;38;5;214m: \033[1;38;5;111m"
