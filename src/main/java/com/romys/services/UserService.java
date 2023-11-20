@@ -71,7 +71,7 @@ public class UserService {
 
         }
 
-        public ElasticHit<UserModel> getUserByName(String username) throws IOException {
+        public ElasticHit<UserModel> getUserByUsername(String username) throws IOException {
                 return this.getByStr("username", username);
         }
 

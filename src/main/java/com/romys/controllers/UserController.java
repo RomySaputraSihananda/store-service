@@ -26,50 +26,38 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-    @Autowired
-    private UserService service;
+        @Autowired
+        private UserService service;
 
-    @Autowired
-    private JwtService jwtService;
+        @Autowired
+        private JwtService jwtService;
 
-    @GetMapping
-    @Operation(summary = "Get info self", description = "API for get info self")
-    public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getSelfInfo(HttpServletRequest request)
-            throws IOException {
-        String username = this.jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+        @GetMapping
+        @Operation(summary = "Get info self", description = "API for get info self")
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getSelfInfo(HttpServletRequest request)
+                        throws IOException {
+                String username = this.jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        return new ResponseEntity<>(
-                new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                        String.format("all data from %s", username),
-                        this.service.getUserByName(
-                                username)),
-                HttpStatus.OK);
-    }
-
-    @PutMapping
-    @Operation(summary = "Update info self", description = "API for update info self")
-    public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
-            HttpServletRequest request) throws IOException {
-        String username = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println(request.getHeader(HttpHeaders.USER_AGENT));
-        System.out.println(this.getClientIP(request));
-
-        return new ResponseEntity<>(
-                new BodyResponse<>(
-                        HttpStatus.OK.getReasonPhrase(),
-                        HttpStatus.OK.value(),
-                        String.format("success update info %s", username),
-                        null),
-                HttpStatus.OK);
-    }
-
-    private String getClientIP(HttpServletRequest request) {
-        String xForwardedForHeader = request.getHeader("X-Forwarded-For");
-
-        if (xForwardedForHeader == null) {
-            return request.getRemoteAddr();
+                return new ResponseEntity<>(
+                                new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                                                String.format("all data from %s", username),
+                                                this.service.getUserByUsername(
+                                                                username)),
+                                HttpStatus.OK);
         }
 
-        return xForwardedForHeader.split(",")[0].trim();
-    }
+        @PutMapping
+        @Operation(summary = "Update info self", description = "API for update info self")
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
+                        HttpServletRequest request) throws IOException {
+                ElasticHit<UserModel> user = this.jwtService.getUser(HttpHeaders.AUTHORIZATION);
+
+                return new ResponseEntity<>(
+                                new BodyResponse<>(
+                                                HttpStatus.OK.getReasonPhrase(),
+                                                HttpStatus.OK.value(),
+                                                String.format("success update info %s", user.id()),
+                                                null),
+                                HttpStatus.OK);
+        }
 }

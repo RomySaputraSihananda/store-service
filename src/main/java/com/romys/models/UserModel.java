@@ -1,5 +1,7 @@
 package com.romys.models;
 
+import org.springframework.http.HttpHeaders;
+
 import com.romys.DTOs.AddressDTO;
 import com.romys.DTOs.BankDTO;
 import com.romys.DTOs.CompanyDTO;
@@ -72,43 +74,17 @@ public class UserModel {
         this.company = userDetailDTO.getCompany();
         this.ein = userDetailDTO.getEin();
         this.ssn = userDetailDTO.getSsn();
+        this.ip = this.getClientIP(request);
+        this.userAgent = request.getHeader(HttpHeaders.USER_AGENT);
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+
+        if (xForwardedForHeader == null) {
+            return request.getRemoteAddr();
+        }
+
+        return xForwardedForHeader.split(",")[0].trim();
     }
 }
-
-// @Data
-// class Address {
-// private String address;
-// private String city;
-// private Coordinates coordinates;
-// private String postalCode;
-// private String state;
-// }
-
-// @Data
-// class Bank {
-// private String cardExpire;
-// private String cardNumber;
-// private String cardType;
-// private String currency;
-// private String iban;
-// }
-
-// @Data
-// class Company {
-// private Address address;
-// private String department;
-// private String name;
-// private String title;
-// }
-
-// @Data
-// class Coordinates {
-// private double lat;
-// private double lon;
-// }
-
-// @Data
-// class Hair {
-// private String color;
-// private String type;
-// }

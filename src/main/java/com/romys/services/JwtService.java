@@ -1,14 +1,19 @@
 package com.romys.services;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.romys.models.UserModel;
+import com.romys.payloads.hit.ElasticHit;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +28,9 @@ public class JwtService {
 
     @Value("${service.jwt.EXPIRATION}")
     private int EXPIRATION;
+
+    @Autowired
+    private UserService service;
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -43,6 +51,10 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return this.extractClaim(this.filter(token), Claims::getSubject);
+    }
+
+    public ElasticHit<UserModel> getUser(String token) throws IOException {
+        return this.service.getUserByUsername(this.extractUsername(token));
     }
 
     public Date extractExpiration(String token) {
