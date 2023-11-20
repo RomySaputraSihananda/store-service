@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,13 +20,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.romys.models.ProductModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
+import com.romys.services.JwtService;
 import com.romys.services.ProductService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/product")
 public class ProductController {
         @Autowired
         private ProductService service;
+
+        @Autowired
+        private JwtService jwt;
 
         /*
          * get all data
@@ -105,5 +112,12 @@ public class ProductController {
                                                 String.format("product with id %s success deleted", id),
                                                 this.service.deleteProduct(id)),
                                 HttpStatus.OK);
+        }
+
+        @GetMapping("/test")
+        public String fortest(HttpServletRequest request)
+                        throws IOException {
+                String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+                return this.jwt.extractUsername(token);
         }
 }

@@ -42,7 +42,7 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        return this.extractClaim(token, Claims::getSubject);
+        return this.extractClaim(this.filter(token), Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
@@ -73,5 +73,13 @@ public class JwtService {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String filter(String token) {
+        if (token.startsWith("Bearer")) {
+            token = token.substring(7);
+        }
+
+        return token;
     }
 }
