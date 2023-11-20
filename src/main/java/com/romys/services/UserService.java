@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.romys.models.ProductModel;
 import com.romys.models.UserModel;
 import com.romys.DTOs.UserDTO;
 import com.romys.DTOs.UserDetailDTO;
@@ -25,6 +26,7 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.HitsMetadata;
 import co.elastic.clients.elasticsearch.core.search.TotalHits;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
@@ -37,7 +39,7 @@ public class UserService {
         @Value("${service.elastic.index.users}")
         private String index;
 
-        public ArrayList<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
+        public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
@@ -59,7 +61,7 @@ public class UserService {
                                                 .collect(Collectors.toList()));
         }
 
-        public ArrayList<ElasticHit<UserModel>> getUserByid(String id) throws IOException {
+        public List<ElasticHit<UserModel>> getUserByid(String id) throws IOException {
                 GetResponse<UserModel> response = this.client.get(
                                 get -> get.index(this.index).id(id),
                                 UserModel.class);
@@ -67,8 +69,8 @@ public class UserService {
                 if (!response.found())
                         throw new ProductException("surat not found");
 
-                return new ArrayList<>(List
-                                .of(new ElasticHit<UserModel>(response.id(), response.index(), response.source())));
+                return List
+                                .of(new ElasticHit<UserModel>(response.id(), response.index(), response.source()));
 
         }
 
@@ -76,13 +78,42 @@ public class UserService {
                 return this.getByStr("username", username);
         }
 
-        public ElasticHit<UserModel> updateUser(UserDetailDTO user, String id) {
-                return null;
-        }
-
         public ArrayList<ElasticHit<UserModel>> deleteUser(UserModel user) {
                 return null;
         }
+
+        public ElasticHit<UserModel> updateUser(UserDetailDTO user, ElasticHit<UserModel> hit,
+                        HttpServletRequest request) throws IOException {
+                this.client.update(
+                                update -> update.index(this.index).id(hit.id()).doc(new UserModel(user, request))
+                                                .refresh(Refresh.True),
+                                UserModel.class);
+
+                return this.getUserByid(hit.id()).get(0);
+        }
+
+        // public List<ElasticHit<ProductModel>> updateProduct(ProductModel product,
+        // String id) throws IOException {
+        // ElasticHit<ProductModel> hit = this.getProductByid(id).get(0);
+
+        // hit.source().setTitle(product.getTitle());
+        // hit.source().setDescription(product.getDescription());
+        // hit.source().setPrice(product.getPrice());
+        // hit.source().setDiscountPercentage(product.getDiscountPercentage());
+        // hit.source().setRating(product.getRating());
+        // hit.source().setStock(product.getStock());
+        // hit.source().setBrand(product.getBrand());
+        // hit.source().setCategory(product.getCategory());
+        // hit.source().setThumbnail(product.getThumbnail());
+        // hit.source().setImages(product.getImages());
+
+        // this.client.update(
+        // update -> update.index(this.products).id(hit.id()).doc(hit.source())
+        // .refresh(Refresh.True),
+        // ProductModel.class);
+
+        // return new ArrayList<>(List.of(hit));
+        // }
 
         private ElasticHit<UserModel> getByStr(String field, String value) throws IOException {
                 try {

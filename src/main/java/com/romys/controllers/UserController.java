@@ -49,14 +49,14 @@ public class UserController {
         @Operation(summary = "Update info self", description = "API for update info self")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
-                ElasticHit<UserModel> user = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
+                ElasticHit<UserModel> hit = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>(
                                                 HttpStatus.OK.getReasonPhrase(),
                                                 HttpStatus.OK.value(),
-                                                String.format("success update info %s", user.id()),
-                                                service.updateUser(userDetail, user.id())),
+                                                String.format("success update info %s", hit.id()),
+                                                service.updateUser(userDetail, hit, request)),
                                 HttpStatus.OK);
         }
 }

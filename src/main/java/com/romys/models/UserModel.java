@@ -76,6 +76,9 @@ public class UserModel {
         this.ssn = userDetailDTO.getSsn();
         this.ip = this.getClientIP(request);
         this.userAgent = request.getHeader(HttpHeaders.USER_AGENT);
+        // this.role = Role.USER;
+        // this.username = user.getUsername();
+        // this.password = user.getPassword();
     }
 
     private String getClientIP(HttpServletRequest request) {
