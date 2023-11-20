@@ -56,7 +56,7 @@ public class UserController {
                                                 HttpStatus.OK.getReasonPhrase(),
                                                 HttpStatus.OK.value(),
                                                 String.format("success update info %s", user.id()),
-                                                null),
+                                                service.updateUser(userDetail, user.id())),
                                 HttpStatus.OK);
         }
 }

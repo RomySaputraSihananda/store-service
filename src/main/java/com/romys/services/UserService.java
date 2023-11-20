@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.romys.models.UserModel;
 import com.romys.DTOs.UserDTO;
+import com.romys.DTOs.UserDetailDTO;
 import com.romys.exceptions.ProductException;
 import com.romys.exceptions.UserException;
 import com.romys.payloads.hit.ElasticHit;
@@ -75,7 +76,7 @@ public class UserService {
                 return this.getByStr("username", username);
         }
 
-        public ArrayList<ElasticHit<UserModel>> updateUser(UserModel user, String id) {
+        public ElasticHit<UserModel> updateUser(UserDetailDTO user, String id) {
                 return null;
         }
 
