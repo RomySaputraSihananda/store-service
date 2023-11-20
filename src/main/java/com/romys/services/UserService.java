@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -82,14 +83,62 @@ public class UserService {
                 return null;
         }
 
-        public ElasticHit<UserModel> updateUser(UserDetailDTO user, ElasticHit<UserModel> hit,
+        public ElasticHit<UserModel> updateUser(UserDetailDTO userDetailDTO, ElasticHit<UserModel> hit,
                         HttpServletRequest request) throws IOException {
+                if (userDetailDTO.getFirstName() != null)
+                        hit.source().setFirstName(userDetailDTO.getFirstName());
+                if (userDetailDTO.getLastName() != null)
+                        hit.source().setLastName(userDetailDTO.getLastName());
+                if (userDetailDTO.getMaidenName() != null)
+                        hit.source().setMaidenName(userDetailDTO.getMaidenName());
+                if (userDetailDTO.getAge() != 0)
+                        hit.source().setAge(userDetailDTO.getAge());
+                if (userDetailDTO.getGender() != null)
+                        hit.source().setGender(userDetailDTO.getGender());
+                if (userDetailDTO.getEmail() != null)
+                        hit.source().setEmail(userDetailDTO.getEmail());
+                if (userDetailDTO.getPhone() != null)
+                        hit.source().setPhone(userDetailDTO.getPhone());
+                if (userDetailDTO.getBirthDate() != null)
+                        hit.source().setBirthDate(userDetailDTO.getBirthDate());
+                if (userDetailDTO.getImage() != null)
+                        hit.source().setImage(userDetailDTO.getImage());
+                if (userDetailDTO.getBloodGroup() != null)
+                        hit.source().setBloodGroup(userDetailDTO.getBloodGroup());
+                if (userDetailDTO.getHeight() != 0)
+                        hit.source().setHeight(userDetailDTO.getHeight());
+                if (userDetailDTO.getWeight() != 0)
+                        hit.source().setWeight(userDetailDTO.getWeight());
+                if (userDetailDTO.getEyeColor() != null)
+                        hit.source().setEyeColor(userDetailDTO.getEyeColor());
+                if (userDetailDTO.getHair() != null)
+                        hit.source().setHair(userDetailDTO.getHair());
+                if (userDetailDTO.getDomain() != null)
+                        hit.source().setDomain(userDetailDTO.getDomain());
+                if (userDetailDTO.getAddress() != null)
+                        hit.source().setAddress(userDetailDTO.getAddress());
+                if (userDetailDTO.getMacAddress() != null)
+                        hit.source().setMacAddress(userDetailDTO.getMacAddress());
+                if (userDetailDTO.getUniversity() != null)
+                        hit.source().setUniversity(userDetailDTO.getUniversity());
+                if (userDetailDTO.getBank() != null)
+                        hit.source().setBank(userDetailDTO.getBank());
+                if (userDetailDTO.getCompany() != null)
+                        hit.source().setCompany(userDetailDTO.getCompany());
+                if (userDetailDTO.getEin() != null)
+                        hit.source().setEin(userDetailDTO.getEin());
+                if (userDetailDTO.getSsn() != null)
+                        hit.source().setSsn(userDetailDTO.getSsn());
+
+                hit.source().setIp(this.getClientIP(request));
+                hit.source().setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+
                 this.client.update(
-                                update -> update.index(this.index).id(hit.id()).doc(new UserModel(user, request))
+                                update -> update.index(this.index).id(hit.id()).doc(hit.source())
                                                 .refresh(Refresh.True),
                                 UserModel.class);
 
-                return this.getUserByid(hit.id()).get(0);
+                return hit;
         }
 
         // public List<ElasticHit<ProductModel>> updateProduct(ProductModel product,
@@ -141,5 +190,15 @@ public class UserService {
                 } catch (IOException e) {
                         throw e;
                 }
+        }
+
+        private String getClientIP(HttpServletRequest request) {
+                String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+
+                if (xForwardedForHeader == null) {
+                        return request.getRemoteAddr();
+                }
+
+                return xForwardedForHeader.split(",")[0].trim();
         }
 }
