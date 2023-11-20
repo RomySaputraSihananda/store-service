@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romys.models.ProductModel;
 import com.romys.payloads.hit.ElasticHit;
-import com.romys.payloads.responses.BodyResponse;
-import com.romys.payloads.responses.ProductResponse;
+import com.romys.payloads.responses.BodyResponses;
 import com.romys.services.JwtService;
 import com.romys.services.ProductService;
 
@@ -41,10 +40,10 @@ public class ProductController {
          */
         @GetMapping
         @Operation(summary = "Get all products", description = "API for get all products")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getAll() throws IOException {
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> getAll() throws IOException {
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products",
-                                                new ProductResponse(this.service.getProducts())),
+                                new BodyResponses<>("ok", HttpStatus.OK.value(), "all data of products",
+                                                this.service.getProducts()),
                                 HttpStatus.OK);
         }
 
@@ -53,12 +52,12 @@ public class ProductController {
          */
         @GetMapping("/{id}")
         @Operation(summary = "Get product by id", description = "API for get product by id")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getById(@PathVariable String id)
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> getById(@PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.OK.value(),
+                                new BodyResponses<>("ok", HttpStatus.OK.value(),
                                                 String.format("data of products by id %s", id),
-                                                new ProductResponse<>(this.service.getProductByid(id))),
+                                                this.service.getProductByid(id)),
                                 HttpStatus.OK);
         }
 
@@ -67,13 +66,13 @@ public class ProductController {
          */
         @GetMapping("/search")
         @Operation(summary = "Get product by name", description = "API for get product by name")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getByName(
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> getByName(
                         @RequestParam(required = true) String field, @RequestParam(required = true) String value)
                         throws IOException {
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.OK.value(),
+                                new BodyResponses<>("ok", HttpStatus.OK.value(),
                                                 String.format("data of products by value %s on field %s", value, field),
-                                                new ProductResponse<>(this.service.searchProduct(field, value))),
+                                                this.service.searchProduct(field, value)),
                                 HttpStatus.OK);
         }
 
@@ -82,14 +81,14 @@ public class ProductController {
          */
         @PostMapping
         @Operation(summary = "Create new product", description = "API for create new product")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> addData(
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> addData(
                         @RequestBody(required = true) ProductModel product) throws IOException {
                 List<ElasticHit<ProductModel>> response = this.service.createProduct(product);
 
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.CREATED.value(),
+                                new BodyResponses<>("ok", HttpStatus.CREATED.value(),
                                                 String.format("product with id success created"),
-                                                new ProductResponse<>(response)),
+                                                response),
                                 HttpStatus.CREATED);
         }
 
@@ -98,14 +97,14 @@ public class ProductController {
          */
         @PutMapping("/{id}")
         @Operation(summary = "Update product", description = "API for update product")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> updateData(
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> updateData(
                         @PathVariable String id,
                         @RequestBody(required = true) ProductModel product)
                         throws IOException {
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.OK.value(),
+                                new BodyResponses<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success updated", id),
-                                                new ProductResponse<>(this.service.updateProduct(product, id))),
+                                                this.service.updateProduct(product, id)),
                                 HttpStatus.OK);
         }
 
@@ -114,13 +113,13 @@ public class ProductController {
          */
         @DeleteMapping("/{id}")
         @Operation(summary = "Delete product", description = "API for delete product")
-        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> deleteData(
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> deleteData(
                         @PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
-                                new BodyResponse<>("ok", HttpStatus.OK.value(),
+                                new BodyResponses<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success deleted", id),
-                                                new ProductResponse<>(this.service.deleteProduct(id))),
+                                                this.service.deleteProduct(id)),
                                 HttpStatus.OK);
         }
 
