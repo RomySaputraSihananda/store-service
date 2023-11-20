@@ -23,6 +23,7 @@ import com.romys.DTOs.UserDTO;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
+import com.romys.payloads.responses.BodyResponses;
 import com.romys.payloads.responses.TokenResponse;
 import com.romys.services.JwtService;
 import com.romys.services.UserService;
@@ -68,6 +69,8 @@ public class AuthController {
                         @RequestBody(required = true) UserDTO user, HttpServletResponse response)
                         throws AuthenticationException {
 
+                System.out.println(response);
+
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", 200, "ok",
                                                 new TokenResponse(this.builder(response, user.getUsername(),
@@ -78,17 +81,15 @@ public class AuthController {
         /*
          * signup account
          */
-        // @PostMapping("/signup")
-        // @Operation(summary = "Signup new user", description = "API for Signup new
-        // user")
-        // public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> signup(
-        // @RequestBody(required = true) UserDTO user) throws IOException {
-        // List<ElasticHit<UserModel>> response = this.service.createUser(user);
+        @PostMapping("/signup")
+        @Operation(summary = "Signup new user", description = "API for Signup new user")
+        public ResponseEntity<BodyResponses<ElasticHit<UserModel>>> signup(
+                        @RequestBody(required = true) UserDTO user) throws IOException {
+                List<ElasticHit<UserModel>> response = this.service.createUser(user);
 
-        // return new ResponseEntity<>(
-        // new BodyResponse<>("ok", HttpStatus.CREATED.value(),
-        // String.format("product with id success created"),
-        // response),
-        // HttpStatus.CREATED);
-        // }
+                return new ResponseEntity<>(
+                                new BodyResponses<>("ok", HttpStatus.CREATED.value(),
+                                                String.format("product with id success created"), response),
+                                HttpStatus.CREATED);
+        }
 }
