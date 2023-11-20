@@ -32,12 +32,11 @@ public class ProductService {
                 SearchResponse<ProductModel> response = this.client.search(search -> search.index(this.products),
                                 ProductModel.class);
 
-                return new ArrayList<>(
-                                response.hits().hits().stream()
-                                                .map(product -> new ElasticHit<ProductModel>(product.id(),
-                                                                product.index(),
-                                                                product.source()))
-                                                .collect(Collectors.toList()));
+                return response.hits().hits().stream()
+                                .map(product -> new ElasticHit<ProductModel>(product.id(),
+                                                product.index(),
+                                                product.source()))
+                                .collect(Collectors.toList());
         }
 
         public List<ElasticHit<ProductModel>> getProductByid(String id) throws IOException {
@@ -48,8 +47,7 @@ public class ProductService {
                 if (!response.found())
                         throw new ProductException("product not found");
 
-                return new ArrayList<>(List
-                                .of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source())));
+                return List.of(new ElasticHit<ProductModel>(response.id(), response.index(), response.source()));
         }
 
         public List<ElasticHit<ProductModel>> searchProduct(String field, String value) throws IOException {

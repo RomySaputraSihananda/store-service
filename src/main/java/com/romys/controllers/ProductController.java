@@ -67,13 +67,13 @@ public class ProductController {
          */
         @GetMapping("/search")
         @Operation(summary = "Get product by name", description = "API for get product by name")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getByName(
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getByName(
                         @RequestParam(required = true) String field, @RequestParam(required = true) String value)
                         throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("data of products by value %s on field %s", value, field),
-                                                this.service.searchProduct(field, value)),
+                                                new ProductResponse<>(this.service.searchProduct(field, value))),
                                 HttpStatus.OK);
         }
 
@@ -82,14 +82,14 @@ public class ProductController {
          */
         @PostMapping
         @Operation(summary = "Create new product", description = "API for create new product")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> addData(
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> addData(
                         @RequestBody(required = true) ProductModel product) throws IOException {
                 List<ElasticHit<ProductModel>> response = this.service.createProduct(product);
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.CREATED.value(),
                                                 String.format("product with id success created"),
-                                                response),
+                                                new ProductResponse<>(response)),
                                 HttpStatus.CREATED);
         }
 
@@ -98,13 +98,14 @@ public class ProductController {
          */
         @PutMapping("/{id}")
         @Operation(summary = "Update product", description = "API for update product")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> updateData(@PathVariable String id,
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> updateData(
+                        @PathVariable String id,
                         @RequestBody(required = true) ProductModel product)
                         throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success updated", id),
-                                                this.service.updateProduct(product, id)),
+                                                new ProductResponse<>(this.service.updateProduct(product, id))),
                                 HttpStatus.OK);
         }
 
@@ -113,12 +114,13 @@ public class ProductController {
          */
         @DeleteMapping("/{id}")
         @Operation(summary = "Delete product", description = "API for delete product")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> deleteData(@PathVariable String id)
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> deleteData(
+                        @PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success deleted", id),
-                                                this.service.deleteProduct(id)),
+                                                new ProductResponse<>(this.service.deleteProduct(id))),
                                 HttpStatus.OK);
         }
 
