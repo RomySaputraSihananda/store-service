@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.romys.DTOs.TokenDTO;
 import com.romys.DTOs.UserDTO;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
@@ -26,6 +27,7 @@ import com.romys.payloads.responses.BodyResponse;
 import com.romys.services.JwtService;
 import com.romys.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -43,16 +45,16 @@ public class AuthController {
         @Autowired
         private UserDetailsService userDetailsService;
 
-        private String builder(HttpServletResponse response, String username, String password)
+        private TokenDTO builder(HttpServletResponse response, String username, String password)
                         throws AuthenticationException {
                 Authentication authentication = this.authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(username, password));
                 if (authentication.isAuthenticated()) {
                         UserDetails user = this.userDetailsService.loadUserByUsername(username);
                         String token = this.jwtService.generateToken(username);
-                        // response.setHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s",
-                        // token));
-                        return token;
+                        response.setHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s",
+                                        token));
+                        return new TokenDTO(token);
                 }
                 throw new AuthenticationException("Failed to authenticate user");
         }
@@ -61,19 +63,21 @@ public class AuthController {
          * signin account
          */
         @PostMapping("/signin")
-        public ResponseEntity<?> signin(
+        @Operation(summary = "Signin user", description = "API for Signin user")
+        public ResponseEntity<TokenDTO> signin(
                         @RequestBody(required = true) UserDTO user, HttpServletResponse response)
                         throws AuthenticationException {
 
                 return new ResponseEntity<>(
                                 this.builder(response, user.getUsername(), user.getPassword()),
-                                HttpStatus.CREATED);
+                                HttpStatus.OK);
         }
 
         /*
          * signup account
          */
         @PostMapping("/signup")
+        @Operation(summary = "Signup new user", description = "API for Signup new user")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> signup(
                         @RequestBody(required = true) UserDTO user) throws IOException {
                 List<ElasticHit<UserModel>> response = this.service.createUser(user);

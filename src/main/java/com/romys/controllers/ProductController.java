@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.romys.models.ProductModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
+import com.romys.payloads.responses.ProductResponse;
 import com.romys.services.JwtService;
 import com.romys.services.ProductService;
 
@@ -40,10 +41,10 @@ public class ProductController {
          */
         @GetMapping
         @Operation(summary = "Get all products", description = "API for get all products")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getAll() throws IOException {
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getAll() throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(), "all data of products",
-                                                this.service.getProducts()),
+                                                new ProductResponse(this.service.getProducts())),
                                 HttpStatus.OK);
         }
 
@@ -52,12 +53,12 @@ public class ProductController {
          */
         @GetMapping("/{id}")
         @Operation(summary = "Get product by id", description = "API for get product by id")
-        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> getById(@PathVariable String id)
+        public ResponseEntity<BodyResponse<ProductResponse<ElasticHit<ProductModel>>>> getById(@PathVariable String id)
                         throws IOException {
                 return new ResponseEntity<>(
                                 new BodyResponse<>("ok", HttpStatus.OK.value(),
                                                 String.format("data of products by id %s", id),
-                                                this.service.getProductByid(id)),
+                                                new ProductResponse<>(this.service.getProductByid(id))),
                                 HttpStatus.OK);
         }
 
