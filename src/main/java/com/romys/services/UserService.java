@@ -1,6 +1,7 @@
 package com.romys.services;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,50 +85,22 @@ public class UserService {
 
         public ElasticHit<UserModel> updateUser(UserDetailDTO userDetailDTO, ElasticHit<UserModel> hit,
                         HttpServletRequest request) throws IOException {
-                if (userDetailDTO.getFirstName() != null)
-                        hit.source().setFirstName(userDetailDTO.getFirstName());
-                if (userDetailDTO.getLastName() != null)
-                        hit.source().setLastName(userDetailDTO.getLastName());
-                if (userDetailDTO.getMaidenName() != null)
-                        hit.source().setMaidenName(userDetailDTO.getMaidenName());
-                if (userDetailDTO.getAge() != 0)
-                        hit.source().setAge(userDetailDTO.getAge());
-                if (userDetailDTO.getGender() != null)
-                        hit.source().setGender(userDetailDTO.getGender());
-                if (userDetailDTO.getEmail() != null)
-                        hit.source().setEmail(userDetailDTO.getEmail());
-                if (userDetailDTO.getPhone() != null)
-                        hit.source().setPhone(userDetailDTO.getPhone());
-                if (userDetailDTO.getBirthDate() != null)
-                        hit.source().setBirthDate(userDetailDTO.getBirthDate());
-                if (userDetailDTO.getImage() != null)
-                        hit.source().setImage(userDetailDTO.getImage());
-                if (userDetailDTO.getBloodGroup() != null)
-                        hit.source().setBloodGroup(userDetailDTO.getBloodGroup());
-                if (userDetailDTO.getHeight() != 0)
-                        hit.source().setHeight(userDetailDTO.getHeight());
-                if (userDetailDTO.getWeight() != 0)
-                        hit.source().setWeight(userDetailDTO.getWeight());
-                if (userDetailDTO.getEyeColor() != null)
-                        hit.source().setEyeColor(userDetailDTO.getEyeColor());
-                if (userDetailDTO.getHair() != null)
-                        hit.source().setHair(userDetailDTO.getHair());
-                if (userDetailDTO.getDomain() != null)
-                        hit.source().setDomain(userDetailDTO.getDomain());
-                if (userDetailDTO.getAddress() != null)
-                        hit.source().setAddress(userDetailDTO.getAddress());
-                if (userDetailDTO.getMacAddress() != null)
-                        hit.source().setMacAddress(userDetailDTO.getMacAddress());
-                if (userDetailDTO.getUniversity() != null)
-                        hit.source().setUniversity(userDetailDTO.getUniversity());
-                if (userDetailDTO.getBank() != null)
-                        hit.source().setBank(userDetailDTO.getBank());
-                if (userDetailDTO.getCompany() != null)
-                        hit.source().setCompany(userDetailDTO.getCompany());
-                if (userDetailDTO.getEin() != null)
-                        hit.source().setEin(userDetailDTO.getEin());
-                if (userDetailDTO.getSsn() != null)
-                        hit.source().setSsn(userDetailDTO.getSsn());
+                Class<?> hitSourceClass = hit.source().getClass();
+                Field[] fields = userDetailDTO.getClass().getDeclaredFields();
+
+                for (Field field : fields) {
+                        try {
+                                Object value = field.get(userDetailDTO);
+                                if (value != null) {
+                                        Field hitField = hitSourceClass.getDeclaredField(field.getName());
+                                        hitField.setAccessible(true);
+                                        hitField.set(hit.source(), value);
+                                }
+                        } catch (NoSuchFieldException | IllegalAccessException e) {
+                                System.out.println(e.toString());
+                        }
+
+                }
 
                 hit.source().setIp(this.getClientIP(request));
                 hit.source().setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
@@ -139,29 +112,6 @@ public class UserService {
 
                 return hit;
         }
-
-        // public List<ElasticHit<ProductModel>> updateProduct(ProductModel product,
-        // String id) throws IOException {
-        // ElasticHit<ProductModel> hit = this.getProductByid(id).get(0);
-
-        // hit.source().setTitle(product.getTitle());
-        // hit.source().setDescription(product.getDescription());
-        // hit.source().setPrice(product.getPrice());
-        // hit.source().setDiscountPercentage(product.getDiscountPercentage());
-        // hit.source().setRating(product.getRating());
-        // hit.source().setStock(product.getStock());
-        // hit.source().setBrand(product.getBrand());
-        // hit.source().setCategory(product.getCategory());
-        // hit.source().setThumbnail(product.getThumbnail());
-        // hit.source().setImages(product.getImages());
-
-        // this.client.update(
-        // update -> update.index(this.products).id(hit.id()).doc(hit.source())
-        // .refresh(Refresh.True),
-        // ProductModel.class);
-
-        // return new ArrayList<>(List.of(hit));
-        // }
 
         private ElasticHit<UserModel> getByStr(String field, String value) throws IOException {
                 try {
