@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,7 @@ public class UserController {
 
         @PutMapping
         @Operation(summary = "Update info self", description = "API for update info self")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> updateSelfInfo(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
                 ElasticHit<UserModel> hit = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
@@ -58,5 +59,19 @@ public class UserController {
                                                 String.format("success update info %s", hit.source().getUsername()),
                                                 service.updateUser(userDetail, hit, request)),
                                 HttpStatus.OK);
+        }
+
+        @PostMapping
+        @Operation(summary = "Reset Password", description = "API for Reset Password")
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
+                        HttpServletRequest request) throws IOException {
+                return null;
+        }
+
+        @GetMapping("/logs")
+        @Operation(summary = "Get Log", description = "API for get Log")
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getLog(@RequestBody UserDetailDTO userDetail,
+                        HttpServletRequest request) throws IOException {
+                return null;
         }
 }
