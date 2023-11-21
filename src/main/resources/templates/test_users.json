@@ -1,0 +1,69 @@
+{
+  "mappings": {
+    "properties": {
+      "role": { "type": "text" },
+      "username": { "type": "text" },
+      "password": { "type": "text" },
+      "firstName": { "type": "text" },
+      "lastName": { "type": "text" },
+      "maidenName": { "type": "text" },
+      "age": { "type": "integer" },
+      "gender": { "type": "text" },
+      "email": { "type": "text" },
+      "phone": { "type": "text" },
+      "birthDate": { "type": "date", "format": "yyyy-MM-dd" },
+      "image": { "type": "text" },
+      "bloodGroup": { "type": "keyword" },
+      "height": { "type": "float" },
+      "weight": { "type": "float" },
+      "eyeColor": { "type": "keyword" },
+      "hair": {
+        "properties": {
+          "color": { "type": "keyword" },
+          "type": { "type": "keyword" }
+        }
+      },
+      "domain": { "type": "text" },
+      "ip": { "type": "ip" },
+      "address": {
+        "properties": {
+          "address": { "type": "text" },
+          "city": { "type": "keyword" },
+          "coordinates": { "type": "geo_point" },
+          "postalCode": { "type": "keyword" },
+          "state": { "type": "keyword" }
+        }
+      },
+      "macAddress": { "type": "keyword" },
+      "university": { "type": "text" },
+      "bank": {
+        "properties": {
+          "cardExpire": { "type": "keyword" },
+          "cardNumber": { "type": "keyword" },
+          "cardType": { "type": "keyword" },
+          "currency": { "type": "keyword" },
+          "iban": { "type": "keyword" }
+        }
+      },
+      "company": {
+        "properties": {
+          "address": {
+            "properties": {
+              "address": { "type": "text" },
+              "city": { "type": "keyword" },
+              "coordinates": { "type": "geo_point" },
+              "postalCode": { "type": "keyword" },
+              "state": { "type": "keyword" }
+            }
+          },
+          "department": { "type": "text" },
+          "name": { "type": "text" },
+          "title": { "type": "text" }
+        }
+      },
+      "ein": { "type": "text" },
+      "ssn": { "type": "text" },
+      "userAgent": { "type": "text" }
+    }
+  }
+}
