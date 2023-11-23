@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/F7MvWqwXIAA2oNy.jpeg)
 
-Store Services Rest API with Sping Boot v3.1.5</br>uses Elasticsearch as Storage Database and Swagger UI for Endpoint API documentation. </br>
+Web Services Rest API with Sping Boot v3.1.3 with JWT (JSON Web Token)</br>for authentication features, using Elasticsearch as Storage Database and Swagger UI for</br>Endpoint API documentation.
 
 # Dependency
 
