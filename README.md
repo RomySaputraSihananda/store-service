@@ -1,3 +1,30 @@
+[![Twitter: romy](https://img.shields.io/twitter/follow/RomySihananda)](https://twitter.com/RomySihananda)
+
 # store-service
 
-![](https://asset.kompas.com/crops/rfw-6z8NRJohYVC34YGa4XV69VA=/0x21:1080x741/750x500/data/photo/2023/02/13/63e9d84d1ead9.jpg)
+![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/F7MvWqwXIAA2oNy.jpeg)
+
+Store Services Rest API with Sping Boot v3.1.5</br>uses Elasticsearch as Storage Database and Swagger UI for Endpoint API documentation. </br>
+
+# Dependency
+
+- org.springframework.boot:spring-boot-starter-web:**3.1.5**
+- org.springframework.boot:spring-boot-starter-security:**3.1.3**
+- org.springdoc:springdoc-openapi-starter-webmvc-ui:**2.2.0**
+- org.projectlombok:lombok:**1.18.30**
+- co.elastic.clients:elasticsearch-java:**7.17.8**
+- com.fasterxml.jackson.core:jackson-databind:**2.15.2**
+- io.jsonwebtoken:jjwt-api:**0.11.5**
+- io.jsonwebtoken:jjwt-impl:**0.11.5**
+- io.jsonwebtoken:jjwt-jackson:**0.11.5**
+
+# EndPoints
+
+The following is a list of available Request URIs:
+
+- **GET** API for get all surat.
+  - http://127.0.0.1:4444/api/v1/alquran
+
+## Licence
+
+All source code is licensed under the GNU General Public License v3. Please [see](https://www.gnu.org/licenses) the original document for more details.
