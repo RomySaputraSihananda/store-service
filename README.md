@@ -22,8 +22,19 @@ Web Services Rest API with Sping Boot v3.1.3 with JWT (JSON Web Token)</br>for a
 
 The following is a list of available Request URIs:
 
-- **GET** API for get all surat.
-  - http://127.0.0.1:4444/api/v1/alquran
+- **Swagger Documentation**
+  - http://127.0.0.1:4444/docs
+- **Auth Controller**
+  - **POST** API for Signin user.
+    - http://127.0.0.1:4444/api/v1/auth/sognin
+  - **POST** API for Signup new user.
+    - http://127.0.0.1:4444/api/v1/auth/sognup
+- **Product Controller**
+  - **GET** API for get all surat.
+    - http://127.0.0.1:4444/api/v1/product
+- **User Controller**
+  - **GET** API for get all surat.
+    - http://127.0.0.1:4444/api/v1/product
 
 ## Licence
 
