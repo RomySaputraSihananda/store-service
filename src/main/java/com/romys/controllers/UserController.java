@@ -35,7 +35,7 @@ public class UserController {
 
         @GetMapping
         @Operation(summary = "Get info self", description = "API for get info self")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getSelfInfo(HttpServletRequest request)
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getInfo(HttpServletRequest request)
                         throws IOException {
                 ElasticHit<UserModel> user = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
@@ -48,7 +48,7 @@ public class UserController {
 
         @PutMapping
         @Operation(summary = "Update info self", description = "API for update info self")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> updateSelfInfo(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> updateInfo(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
                 ElasticHit<UserModel> hit = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
@@ -63,14 +63,14 @@ public class UserController {
 
         @PostMapping
         @Operation(summary = "Reset Password", description = "API for Reset Password")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getById(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> resetPassword(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
                 return null;
         }
 
         @GetMapping("/logs")
         @Operation(summary = "Get Log", description = "API for get Log")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getLog(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getLogs(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
                 return null;
         }

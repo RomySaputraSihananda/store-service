@@ -15,37 +15,37 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RequestMapping("/api/v1/admin")
 public class AdminController {
     @GetMapping
-    public ResponseEntity<String> getAllUsers() {
+    public ResponseEntity<String> getAll() {
         return null;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getUserById(@PathVariable String id) {
+    public ResponseEntity<String> getUser(@PathVariable String id) {
         return null;
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody String test) {
+    public ResponseEntity<String> create(@RequestBody String test) {
         return null;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody String test) {
+    public ResponseEntity<String> update(@PathVariable String id, @RequestBody String test) {
         return null;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id, @RequestBody String test) {
+    public ResponseEntity<String> delete(@PathVariable String id, @RequestBody String test) {
         return null;
     }
 
     @GetMapping("/logs/{id}")
-    public ResponseEntity<String> getLogsUser(@PathVariable String id) {
+    public ResponseEntity<String> getLogs(@PathVariable String id) {
         return null;
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> searchUser(@RequestBody String test) {
+    public ResponseEntity<String> search(@RequestBody String test) {
         return null;
     }
 }
