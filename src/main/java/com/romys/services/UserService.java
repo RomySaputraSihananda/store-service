@@ -48,6 +48,9 @@ public class UserService {
          * create user
          */
         public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
+                if (!this.usernameIsExists(user.getUsername()))
+                        throw new ProductException("surat not found");
+
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
@@ -59,6 +62,9 @@ public class UserService {
                 return this.getUserByid(id);
         }
 
+        /*
+         * get all users
+         */
         public List<ElasticHit<UserModel>> getUsers() throws IOException {
                 SearchResponse<UserModel> response = this.client.search(search -> search.index(this.index),
                                 UserModel.class);
@@ -68,6 +74,9 @@ public class UserService {
                                 .collect(Collectors.toList());
         }
 
+        /*
+         * get user by id
+         */
         public List<ElasticHit<UserModel>> getUserByid(String id) throws IOException {
                 GetResponse<UserModel> response = this.client.get(
                                 get -> get.index(this.index).id(id),
@@ -81,14 +90,23 @@ public class UserService {
 
         }
 
+        /*
+         * get user by name
+         */
         public ElasticHit<UserModel> getUserByUsername(String username) throws IOException {
                 return this.getByStr("username", username);
         }
 
+        /*
+         * delete user
+         */
         public ArrayList<ElasticHit<UserModel>> deleteUser(UserModel user) {
                 return null;
         }
 
+        /*
+         * update all field user
+         */
         public ElasticHit<UserModel> updateUser(UserDetailDTO userDetailDTO, ElasticHit<UserModel> hit,
                         HttpServletRequest request) throws IOException {
                 Class<?> hitSourceClass = hit.source().getClass();
@@ -119,6 +137,9 @@ public class UserService {
                 return hit;
         }
 
+        /*
+         * update password user with validation old password
+         */
         public ElasticHit<UserModel> resetPassword(ElasticHit<UserModel> hit, PasswordDTO password) throws IOException {
                 if (!passwordEncoder.matches(password.getOldPassword(), hit.source().getPassword()))
                         throw new PasswordNotMatchException("old password not match");
@@ -131,6 +152,9 @@ public class UserService {
                 return hit;
         }
 
+        /*
+         * check username isExists
+         */
         private boolean usernameIsExists(String username) throws IOException {
                 try {
                         return this.getUserByUsername(username).source().getUsername().equals(username);
