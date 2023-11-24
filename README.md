@@ -24,16 +24,16 @@ The following is a list of available Request URIs:
 
 - **Swagger Documentation** ( no need authentication )
 
-  - | URL                              | Method | Information           |
-    | :------------------------------- | :----: | :-------------------- |
-    | [/docs]("http://localhost/docs") |  GET   | Swagger Documentation |
+  - | URL                            | Method | Information           |
+    | :----------------------------- | :----: | :-------------------- |
+    | [/docs](http://localhost/docs) |  GET   | Swagger Documentation |
 
 - **Auth Controller** ( no need authentication )
 
-  - | URL                                                          | Method | Information             |
-    | :----------------------------------------------------------- | :----: | :---------------------- |
-    | [/api/v1/auth/signin]("http://localhost/api/v1/auth/signin") |  POST  | API for Signin user     |
-    | [/api/v1/auth/signup]("http://localhost/api/v1/auth/signup") |  POST  | API for Signup new user |
+  - | URL                                                        | Method | Information             |
+    | :--------------------------------------------------------- | :----: | :---------------------- |
+    | [/api/v1/auth/signin](http://localhost/api/v1/auth/signin) |  POST  | API for Signin user     |
+    | [/api/v1/auth/signup](http://localhost/api/v1/auth/signup) |  POST  | API for Signup new user |
 
 - **Product Controller** ( for **USER** authentication only )
 
