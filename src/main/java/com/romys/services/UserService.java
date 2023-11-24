@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import com.romys.exceptions.UserException;
 import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -42,6 +44,9 @@ public class UserService {
         @Value("${service.elastic.index.users}")
         private String index;
 
+        /*
+         * create user
+         */
         public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
@@ -54,14 +59,13 @@ public class UserService {
                 return this.getUserByid(id);
         }
 
-        public ArrayList<ElasticHit<UserModel>> getUsers() throws IOException {
+        public List<ElasticHit<UserModel>> getUsers() throws IOException {
                 SearchResponse<UserModel> response = this.client.search(search -> search.index(this.index),
                                 UserModel.class);
 
-                return new ArrayList<>(
-                                response.hits().hits().stream()
-                                                .map(user -> new ElasticHit<>(user.id(), user.index(), user.source()))
-                                                .collect(Collectors.toList()));
+                return response.hits().hits().stream()
+                                .map(user -> new ElasticHit<>(user.id(), user.index(), user.source()))
+                                .collect(Collectors.toList());
         }
 
         public List<ElasticHit<UserModel>> getUserByid(String id) throws IOException {
@@ -115,10 +119,25 @@ public class UserService {
                 return hit;
         }
 
-        public ElasticHit<UserModel> resetPassword(ElasticHit<UserModel> hit, PasswordDTO password) {
+        public ElasticHit<UserModel> resetPassword(ElasticHit<UserModel> hit, PasswordDTO password) throws IOException {
                 if (!passwordEncoder.matches(password.getOldPassword(), hit.source().getPassword()))
                         throw new PasswordNotMatchException("old password not match");
-                return null;
+
+                hit.source().setPassword(passwordEncoder.encode(password.getNewPassword()));
+                this.client.update(
+                                update -> update.index(this.index).id(hit.id()).doc(hit.source())
+                                                .refresh(Refresh.True),
+                                UserModel.class);
+                return hit;
+        }
+
+        private boolean usernameIsExists(String username) throws IOException {
+                try {
+                        return this.getUserByUsername(username).source().getUsername().equals(username);
+                } catch (UsernameNotFoundException | UserException e) {
+                        return false;
+                }
+
         }
 
         private ElasticHit<UserModel> getByStr(String field, String value) throws IOException {

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.romys.payloads.responses.BodyResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -22,12 +24,13 @@ public class AccessDeniedHandlerComponent implements AccessDeniedHandler {
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		response.setStatus(HttpStatus.FORBIDDEN.value());
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(
 				response.getOutputStream(),
 				new BodyResponse<>(
-						"forbidden", 403, accessDeniedException.getMessage(),
+						HttpStatus.FORBIDDEN.getReasonPhrase(), HttpStatus.FORBIDDEN.value(),
+						accessDeniedException.getMessage(),
 						List.of(
 								request.getServletPath(),
 								accessDeniedException.getClass().getName())));

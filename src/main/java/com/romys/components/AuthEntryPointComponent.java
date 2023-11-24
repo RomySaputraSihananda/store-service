@@ -3,6 +3,7 @@ package com.romys.components;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -22,12 +23,13 @@ public class AuthEntryPointComponent implements AuthenticationEntryPoint {
         public void commence(HttpServletRequest request, HttpServletResponse response,
                         AuthenticationException authException) throws IOException, ServletException {
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 final ObjectMapper mapper = new ObjectMapper();
                 mapper.writeValue(
                                 response.getOutputStream(),
                                 new BodyResponse<>(
-                                                "unauthorized", 401, authException.getMessage(),
+                                                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                                                HttpStatus.UNAUTHORIZED.value(), authException.getMessage(),
                                                 List.of(
                                                                 request.getServletPath(),
                                                                 authException.getClass().getName())));

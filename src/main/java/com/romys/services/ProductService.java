@@ -28,6 +28,9 @@ public class ProductService {
         @Value("${service.elastic.index.products}")
         private String products;
 
+        /*
+         * get All product
+         */
         public List<ElasticHit<ProductModel>> getProducts() throws IOException {
                 SearchResponse<ProductModel> response = this.client.search(search -> search.index(this.products),
                                 ProductModel.class);
@@ -39,6 +42,9 @@ public class ProductService {
                                 .collect(Collectors.toList());
         }
 
+        /*
+         * get product by id
+         */
         public List<ElasticHit<ProductModel>> getProductByid(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),

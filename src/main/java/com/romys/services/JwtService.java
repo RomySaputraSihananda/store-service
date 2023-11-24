@@ -66,11 +66,11 @@ public class JwtService {
     }
 
     private Boolean isExpired(String token) {
-        return (this.extractExpiration(token).before(new Date()));
+        return this.extractExpiration(token).before(new Date());
     }
 
     public Boolean isValid(String token, UserDetails user) {
-        return (this.extractUsername(token).equals(user.getUsername()) && this.isExpired(token) == false);
+        return this.extractUsername(token).equals(user.getUsername()) && this.isExpired(token) == false;
     }
 
     private Claims extractAllClaims(String token) {
@@ -88,9 +88,8 @@ public class JwtService {
     }
 
     private String filter(String token) {
-        if (token.startsWith("Bearer")) {
+        if (token.startsWith("Bearer"))
             token = token.substring(7);
-        }
 
         return token;
     }
