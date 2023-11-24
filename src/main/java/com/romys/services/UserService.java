@@ -47,6 +47,8 @@ public class UserService {
          * create user
          */
         public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
+                if (this.usernameIsExists(user.getUsername()))
+                        throw new UserException("name already Exists");
 
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
@@ -152,7 +154,7 @@ public class UserService {
         /*
          * check username isExists
          */
-        public boolean usernameIsExists(String username) throws IOException {
+        private boolean usernameIsExists(String username) throws IOException {
                 try {
                         return this.getUserByUsername(username).source().getUsername().equals(username);
                 } catch (UsernameNotFoundException | UserException e) {
@@ -192,9 +194,8 @@ public class UserService {
         private String getClientIP(HttpServletRequest request) {
                 String xForwardedForHeader = request.getHeader("X-Forwarded-For");
 
-                if (xForwardedForHeader == null) {
+                if (xForwardedForHeader == null)
                         return request.getRemoteAddr();
-                }
 
                 return xForwardedForHeader.split(",")[0].trim();
         }

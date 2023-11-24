@@ -79,8 +79,6 @@ public class AuthController {
         @Operation(summary = "Signup new user", description = "API for Signup new user")
         public ResponseEntity<BodyResponses<ElasticHit<UserModel>>> signup(
                         @RequestBody(required = true) UserDTO user) throws IOException {
-                if (this.service.usernameIsExists(user.getUsername()))
-                        throw new UserException("name already Exists");
                 List<ElasticHit<UserModel>> response = this.service.createUser(user);
 
                 return new ResponseEntity<>(
