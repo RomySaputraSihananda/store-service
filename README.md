@@ -23,47 +23,47 @@ Web Services Rest API with Sping Boot v3.1.3 with JWT (JSON Web Token)</br>for a
 The following is a list of available Request URIs:
 
 - **Swagger Documentation** ( no need authentication )
-  - http://127.0.0.1:4444/docs
+
+  - | URL                              | Method | Information           |
+    | :------------------------------- | :----: | :-------------------- |
+    | [/docs]("http://localhost/docs") |  GET   | Swagger Documentation |
+
 - **Auth Controller** ( no need authentication )
-  - **POST** API for Signin user.
-    - http://127.0.0.1:4444/api/v1/auth/signin
-  - **POST** API for Signup new user.
-    - http://127.0.0.1:4444/api/v1/auth/signup
+
+  - | URL                                                          | Method | Information             |
+    | :----------------------------------------------------------- | :----: | :---------------------- |
+    | [/api/v1/auth/signin]("http://localhost/api/v1/auth/signin") |  POST  | API for Signin user     |
+    | [/api/v1/auth/signup]("http://localhost/api/v1/auth/signup") |  POST  | API for Signup new user |
+
 - **Product Controller** ( for **USER** authentication only )
-  - **GET** API for get all products.
-    - http://127.0.0.1:4444/api/v1/product
-  - **GET** API for get product by id.
-    - http://127.0.0.1:4444/api/v1/product/{id}
-  - **POST** API for create new product.
-    - http://127.0.0.1:4444/api/v1/product
-  - **PUT** API for update product.
-    - http://127.0.0.1:4444/api/v1/product/{id}
-  - **GET** API for get product by name.
-    - http://127.0.0.1:4444/api/v1/product/search
+
+  - | URL                                                            | Method | Information                  |
+    | :------------------------------------------------------------- | :----: | :--------------------------- |
+    | [/api/v1/product](http:localhost:444/api/v1/product)           |  GET   | API for get all products     |
+    | [/api/v1/product/{id}](http:localhost:444/api/v1/product/{id}) |  GET   | API for get product by id    |
+    | [/api/v1/product](http:localhost:444/api/v1/product)           |  POST  | API for create new product   |
+    | [/api/v1/product/{id}](http:localhost:444/api/v1/product/{id}) |  PUT   | API for update product       |
+    | [/api/v1/product/search](http:localhost:444/api/v1/product)    |  GET   | API for get product by field |
+
 - **User Controller** ( for **USER** authentication only )
-  - **GET** API for get info self.
-    - http://127.0.0.1:4444/api/v1/user
-  - **POST** API for Reset Password.
-    - http://127.0.0.1:4444/api/v1/user
-  - **PUT** API for update info self.
-    - http://127.0.0.1:4444/api/v1/user
-  - **GET** API for get Log self.
-    - http://127.0.0.1:4444/api/v1/user/logs
+
+  - | URL                                                      | Method | Information              |
+    | :------------------------------------------------------- | :----: | :----------------------- |
+    | [/api/v1/user](http:localhost:444/api/v1/user)           |  GET   | API for get self info    |
+    | [/api/v1/user](http:localhost:444/api/v1/user)           |  POST  | API for Reset Password   |
+    | [/api/v1/user](http:localhost:444/api/v1/user)           |  PUT   | API for update self info |
+    | [/api/v1/user/logs](http:localhost:444/api/v1/user/logs) |  GET   | API for get self logs    |
+
 - **Admin Controller** ( for **ADMIN** authentication only )
-  - **GET** API for get all users.
-    - http://127.0.0.1:4444/api/v1/admin
-  - **GET** API for get student by id.
-    - http://127.0.0.1:4444/api/v1/admin/{id}
-  - **POST** API for create new user.
-    - http://127.0.0.1:4444/api/v1/admin
-  - **PUT** API for update user.
-    - http://127.0.0.1:4444/api/v1/admin/{id}
-  - **DELETE** API for delete user.
-    - http://127.0.0.1:4444/api/v1/admin/{id}
-  - **GET** API for get Log user.
-    - http://127.0.0.1:4444/api/v1/admin/logs/{id}
-  - **GET** API for get user by name.
-    - http://127.0.0.1:4444/api/v1/admin/search
+  - | URL                                                                  | Method | Information                  |
+    | :------------------------------------------------------------------- | :----: | :--------------------------- |
+    | [/api/v1/admin](http:localhost:444/api/v1/admin)                     |  GET   | API for get all users        |
+    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           |  GET   | API for get student by id    |
+    | [/api/v1/admin](http:localhost:444/api/v1/admin)                     |  POST  | API for create new user      |
+    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           |  PUT   | API for update user          |
+    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           | DELETE | API for delete user          |
+    | [/api/v1/admin/logs/{id}](http:localhost:444/api/v1/admin/logs/{id}) |  GET   | API for get user log         |
+    | [/api/v1/admin/search](http:localhost:444/api/v1/admin/search)       |  GET   | API for get user by username |
 
 ## Licence
 

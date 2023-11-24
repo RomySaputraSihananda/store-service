@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romys.DTOs.UserDTO;
-import com.romys.exceptions.UserException;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;

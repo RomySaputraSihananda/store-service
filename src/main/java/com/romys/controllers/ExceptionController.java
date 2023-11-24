@@ -15,10 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ExceptionController {
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<BodyResponse<?>> common(Throwable exception, HttpServletRequest request) {
+
         HttpStatus status = null;
         if (exception.getClass().getSimpleName() == "UserException") {
             status = HttpStatus.CONFLICT;
         }
+
         return this.builder(exception, request, status);
     }
 
