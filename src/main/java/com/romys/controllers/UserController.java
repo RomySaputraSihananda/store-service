@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDetailDTO;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
@@ -63,9 +64,18 @@ public class UserController {
 
         @PostMapping
         @Operation(summary = "Reset Password", description = "API for Reset Password")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> resetPassword(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> resetPassword(@RequestBody PasswordDTO password,
                         HttpServletRequest request) throws IOException {
-                return null;
+
+                ElasticHit<UserModel> hit = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
+
+                return new ResponseEntity<>(
+                                new BodyResponse<>(
+                                                HttpStatus.OK.getReasonPhrase(),
+                                                HttpStatus.OK.value(),
+                                                String.format("success update info %s", hit.source().getUsername()),
+                                                this.service.resetPassword(hit, password)),
+                                HttpStatus.OK);
         }
 
         @GetMapping("/logs")

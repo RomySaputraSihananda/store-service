@@ -14,8 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.romys.models.UserModel;
+import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDTO;
 import com.romys.DTOs.UserDetailDTO;
+import com.romys.exceptions.PasswordNotMatchException;
 import com.romys.exceptions.ProductException;
 import com.romys.exceptions.UserException;
 import com.romys.payloads.hit.ElasticHit;
@@ -111,6 +113,12 @@ public class UserService {
                                 UserModel.class);
 
                 return hit;
+        }
+
+        public ElasticHit<UserModel> resetPassword(ElasticHit<UserModel> hit, PasswordDTO password) {
+                if (!passwordEncoder.matches(password.getOldPassword(), hit.source().getPassword()))
+                        throw new PasswordNotMatchException("old password not match");
+                return null;
         }
 
         private ElasticHit<UserModel> getByStr(String field, String value) throws IOException {
