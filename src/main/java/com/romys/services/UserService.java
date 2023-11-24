@@ -24,7 +24,6 @@ import com.romys.exceptions.UserException;
 import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -48,8 +47,8 @@ public class UserService {
          * create user
          */
         public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
-                if (!this.usernameIsExists(user.getUsername()))
-                        throw new ProductException("surat not found");
+                if (this.usernameIsExists(user.getUsername()))
+                        throw new UserException("name already Exists");
 
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
