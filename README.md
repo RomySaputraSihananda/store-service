@@ -22,19 +22,48 @@ Web Services Rest API with Sping Boot v3.1.3 with JWT (JSON Web Token)</br>for a
 
 The following is a list of available Request URIs:
 
-- **Swagger Documentation**
+- **Swagger Documentation** ( no need authentication )
   - http://127.0.0.1:4444/docs
-- **Auth Controller**
+- **Auth Controller** ( no need authentication )
   - **POST** API for Signin user.
-    - http://127.0.0.1:4444/api/v1/auth/sognin
+    - http://127.0.0.1:4444/api/v1/auth/signin
   - **POST** API for Signup new user.
-    - http://127.0.0.1:4444/api/v1/auth/sognup
-- **Product Controller**
-  - **GET** API for get all surat.
+    - http://127.0.0.1:4444/api/v1/auth/signup
+- **Product Controller** ( for **USER** authentication only )
+  - **GET** API for get all products.
     - http://127.0.0.1:4444/api/v1/product
-- **User Controller**
-  - **GET** API for get all surat.
+  - **GET** API for get product by id.
+    - http://127.0.0.1:4444/api/v1/product/{id}
+  - **POST** API for create new product.
     - http://127.0.0.1:4444/api/v1/product
+  - **PUT** API for update product.
+    - http://127.0.0.1:4444/api/v1/product/{id}
+  - **GET** API for get product by name.
+    - http://127.0.0.1:4444/api/v1/product/search
+- **User Controller** ( for **USER** authentication only )
+  - **GET** API for get info self.
+    - http://127.0.0.1:4444/api/v1/user
+  - **POST** API for Reset Password.
+    - http://127.0.0.1:4444/api/v1/user
+  - **PUT** API for update info self.
+    - http://127.0.0.1:4444/api/v1/user
+  - **GET** API for get Log self.
+    - http://127.0.0.1:4444/api/v1/user/logs
+- **Admin Controller** ( for **ADMIN** authentication only )
+  - **GET** API for get all users.
+    - http://127.0.0.1:4444/api/v1/admin
+  - **GET** API for get student by id.
+    - http://127.0.0.1:4444/api/v1/admin/{id}
+  - **POST** API for create new user.
+    - http://127.0.0.1:4444/api/v1/admin
+  - **PUT** API for update user.
+    - http://127.0.0.1:4444/api/v1/admin/{id}
+  - **DELETE** API for delete user.
+    - http://127.0.0.1:4444/api/v1/admin/{id}
+  - **GET** API for get Log user.
+    - http://127.0.0.1:4444/api/v1/admin/logs/{id}
+  - **GET** API for get user by name.
+    - http://127.0.0.1:4444/api/v1/admin/search
 
 ## Licence
 

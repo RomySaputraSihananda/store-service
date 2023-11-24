@@ -62,21 +62,6 @@ public class ProductController {
         }
 
         /*
-         * get data by name
-         */
-        @GetMapping("/search")
-        @Operation(summary = "Get product by name", description = "API for get product by name")
-        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> getByName(
-                        @RequestParam(required = true) String field, @RequestParam(required = true) String value)
-                        throws IOException {
-                return new ResponseEntity<>(
-                                new BodyResponses<>("ok", HttpStatus.OK.value(),
-                                                String.format("data of products by value %s on field %s", value, field),
-                                                this.service.searchProduct(field, value)),
-                                HttpStatus.OK);
-        }
-
-        /*
          * create data
          */
         @PostMapping
@@ -120,6 +105,21 @@ public class ProductController {
                                 new BodyResponses<>("ok", HttpStatus.OK.value(),
                                                 String.format("product with id %s success deleted", id),
                                                 this.service.deleteProduct(id)),
+                                HttpStatus.OK);
+        }
+
+        /*
+         * get data by name
+         */
+        @GetMapping("/search")
+        @Operation(summary = "Get product by name", description = "API for get product by name")
+        public ResponseEntity<BodyResponses<ElasticHit<ProductModel>>> getByName(
+                        @RequestParam(required = true) String field, @RequestParam(required = true) String value)
+                        throws IOException {
+                return new ResponseEntity<>(
+                                new BodyResponses<>("ok", HttpStatus.OK.value(),
+                                                String.format("data of products by value %s on field %s", value, field),
+                                                this.service.searchProduct(field, value)),
                                 HttpStatus.OK);
         }
 
