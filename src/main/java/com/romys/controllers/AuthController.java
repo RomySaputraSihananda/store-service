@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romys.DTOs.UserDTO;
+import com.romys.exceptions.UserException;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
@@ -78,6 +79,8 @@ public class AuthController {
         @Operation(summary = "Signup new user", description = "API for Signup new user")
         public ResponseEntity<BodyResponses<ElasticHit<UserModel>>> signup(
                         @RequestBody(required = true) UserDTO user) throws IOException {
+                if (this.service.usernameIsExists(user.getUsername()))
+                        throw new UserException("name already Exists");
                 List<ElasticHit<UserModel>> response = this.service.createUser(user);
 
                 return new ResponseEntity<>(

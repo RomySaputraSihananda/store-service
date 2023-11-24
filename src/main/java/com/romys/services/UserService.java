@@ -47,8 +47,6 @@ public class UserService {
          * create user
          */
         public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
-                if (this.usernameIsExists(user.getUsername()))
-                        throw new UserException("name already Exists");
 
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
@@ -154,7 +152,7 @@ public class UserService {
         /*
          * check username isExists
          */
-        private boolean usernameIsExists(String username) throws IOException {
+        public boolean usernameIsExists(String username) throws IOException {
                 try {
                         return this.getUserByUsername(username).source().getUsername().equals(username);
                 } catch (UsernameNotFoundException | UserException e) {
