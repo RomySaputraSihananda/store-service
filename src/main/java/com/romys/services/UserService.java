@@ -2,7 +2,6 @@ package com.romys.services;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.romys.models.ProductModel;
 import com.romys.models.UserModel;
 import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDTO;
@@ -104,7 +104,15 @@ public class UserService {
         /*
          * delete user
          */
-        public ArrayList<ElasticHit<UserModel>> deleteUser(UserModel user) {
+        public ElasticHit<UserModel> deleteUser(String id) throws IOException {
+                GetResponse<ProductModel> response = this.client.get(
+                                get -> get.index(this.index).id(id),
+                                ProductModel.class);
+
+                if (!response.found())
+                        throw new UserNotFoundException("product not found");
+
+                this.client.delete(delete -> delete.index(this.index).id(id));
                 return null;
         }
 

@@ -1,6 +1,7 @@
 package com.romys.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDetailDTO;
+import com.romys.models.LogModel;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
 import com.romys.services.JwtService;
+import com.romys.services.LogService;
 import com.romys.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +32,10 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/user")
 public class UserController {
         @Autowired
-        private UserService service;
+        private UserService userService;
+
+        @Autowired
+        private LogService logService;
 
         @Autowired
         private JwtService jwtService;
@@ -58,7 +64,7 @@ public class UserController {
                                                 HttpStatus.OK.getReasonPhrase(),
                                                 HttpStatus.OK.value(),
                                                 String.format("success update info %s", hit.source().getUsername()),
-                                                service.updateUser(userDetail, hit, request)),
+                                                userService.updateUser(userDetail, hit, request)),
                                 HttpStatus.OK);
         }
 
@@ -74,14 +80,23 @@ public class UserController {
                                                 HttpStatus.OK.getReasonPhrase(),
                                                 HttpStatus.OK.value(),
                                                 String.format("success update info %s", hit.source().getUsername()),
-                                                this.service.resetPassword(hit, password)),
+                                                this.userService.resetPassword(hit, password)),
                                 HttpStatus.OK);
         }
 
         @GetMapping("/logs")
         @Operation(summary = "Get Log", description = "API for get Log")
-        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getLogs(@RequestBody UserDetailDTO userDetail,
+        public ResponseEntity<BodyResponse<List<ElasticHit<LogModel>>>> getLogs(
                         HttpServletRequest request) throws IOException {
-                return null;
+
+                String username = this.jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+
+                return new ResponseEntity<>(
+                                new BodyResponse<>(
+                                                HttpStatus.OK.getReasonPhrase(),
+                                                HttpStatus.OK.value(),
+                                                String.format("log %s", username),
+                                                this.logService.getByUsername(username)),
+                                HttpStatus.OK);
         }
 }
