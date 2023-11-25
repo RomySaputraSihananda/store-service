@@ -31,9 +31,8 @@ public class LogModel {
     private String getClientIP(HttpServletRequest request) {
         String xForwardedForHeader = request.getHeader("X-Forwarded-For");
 
-        if (xForwardedForHeader == null) {
+        if (xForwardedForHeader == null)
             return request.getRemoteAddr();
-        }
 
         return xForwardedForHeader.split(",")[0].trim();
     }

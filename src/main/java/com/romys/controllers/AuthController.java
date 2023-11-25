@@ -17,21 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romys.DTOs.UserDTO;
+import com.romys.models.LogModel;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
 import com.romys.payloads.responses.TokenResponse;
 import com.romys.services.JwtService;
+import com.romys.services.Logservice;
 import com.romys.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
         @Autowired
-        private UserService service;
+        private UserService userService;
+
+        @Autowired
+        private Logservice logService;
 
         @Autowired
         private AuthenticationManager authenticationManager;
@@ -39,12 +45,14 @@ public class AuthController {
         @Autowired
         private JwtService jwtService;
 
-        private String builder(HttpServletResponse response, String username, String password)
-                        throws AuthenticationException {
+        private String builder(HttpServletResponse response, HttpServletRequest request, String username,
+                        String password)
+                        throws AuthenticationException, IOException {
                 Authentication authentication = this.authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(username, password));
                 if (authentication.isAuthenticated()) {
                         String token = this.jwtService.generateToken(username);
+                        this.logService.create(new LogModel(username, request));
                         response.setHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s",
                                         token));
                         return token;
@@ -58,13 +66,14 @@ public class AuthController {
         @PostMapping("/signin")
         @Operation(summary = "Signin user", description = "API for Signin user")
         public ResponseEntity<BodyResponse<TokenResponse>> signin(
-                        @RequestBody(required = true) UserDTO user, HttpServletResponse response)
-                        throws AuthenticationException {
+                        @RequestBody(required = true) UserDTO user, HttpServletResponse response,
+                        HttpServletRequest request)
+                        throws AuthenticationException, IOException {
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
                                                 "success login",
-                                                new TokenResponse(this.builder(response, user.getUsername(),
+                                                new TokenResponse(this.builder(response, request, user.getUsername(),
                                                                 user.getPassword()))),
                                 HttpStatus.OK);
         }
@@ -76,7 +85,7 @@ public class AuthController {
         @Operation(summary = "Signup new user", description = "API for Signup new user")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> signup(
                         @RequestBody(required = true) UserDTO user) throws IOException {
-                ElasticHit<UserModel> response = this.service.createUser(user);
+                ElasticHit<UserModel> response = this.userService.createUser(user);
 
                 return new ResponseEntity<>(
                                 new BodyResponse<>(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(),
