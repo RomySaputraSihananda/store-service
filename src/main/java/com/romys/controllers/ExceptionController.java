@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.romys.payloads.responses.BodyResponse;
+import com.romys.payloads.responses.ExceptionResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -14,28 +16,15 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api")
 public class ExceptionController {
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<BodyResponse<?>> common(Throwable exception, HttpServletRequest request) {
+    public ResponseEntity<BodyResponse<ExceptionResponse>> common(Throwable exception, HttpServletRequest request) {
+        HttpStatus status = exception.getClass().getAnnotation(ResponseStatus.class).value();
 
-        HttpStatus status = null;
-        if (exception.getClass().getSimpleName() == "UserException") {
-            status = HttpStatus.CONFLICT;
-        }
-
-        // return this.builder(exception, request, status);
         return new ResponseEntity<>(
                 new BodyResponse<>(
-                        exception.getMessage(), status.value(), "failed",
-                        "error"),
+                        status.getReasonPhrase(), status.value(), exception.getMessage(),
+                        new ExceptionResponse(
+                                request.getServletPath(),
+                                exception.getClass().getName())),
                 status);
     }
-
-    private ResponseEntity<BodyResponse<?>> builder(Throwable exception, HttpServletRequest request,
-            HttpStatus status) {
-        return new ResponseEntity<>(
-                new BodyResponse<>(
-                        exception.getMessage(), status.value(), "failed",
-                        "error"),
-                status);
-    }
-
 }
