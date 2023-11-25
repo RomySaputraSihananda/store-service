@@ -21,7 +21,12 @@ public class ExceptionController {
             status = HttpStatus.CONFLICT;
         }
 
-        return this.builder(exception, request, status);
+        // return this.builder(exception, request, status);
+        return new ResponseEntity<>(
+                new BodyResponse<>(
+                        exception.getMessage(), status.value(), "failed",
+                        "error"),
+                status);
     }
 
     private ResponseEntity<BodyResponse<?>> builder(Throwable exception, HttpServletRequest request,
@@ -32,4 +37,5 @@ public class ExceptionController {
                         "error"),
                 status);
     }
+
 }
