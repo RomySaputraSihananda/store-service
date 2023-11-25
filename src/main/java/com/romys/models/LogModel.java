@@ -25,7 +25,7 @@ public class LogModel {
         this.username = username;
         this.ip = this.getClientIP(request);
         this.userAgent = request.getHeader(HttpHeaders.USER_AGENT);
-        this.time = this.time != null ? this.time : LocalDateTime.now(ZoneId.of("Asia/Jakarta"));
+        this.time = LocalDateTime.now(ZoneId.of("Asia/Jakarta"));
     }
 
     private String getClientIP(HttpServletRequest request) {

@@ -23,7 +23,7 @@ import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
 import com.romys.payloads.responses.TokenResponse;
 import com.romys.services.JwtService;
-import com.romys.services.Logservice;
+import com.romys.services.LogService;
 import com.romys.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class AuthController {
         private UserService userService;
 
         @Autowired
-        private Logservice logService;
+        private LogService logService;
 
         @Autowired
         private AuthenticationManager authenticationManager;
