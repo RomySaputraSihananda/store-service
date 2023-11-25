@@ -1,7 +1,6 @@
 package com.romys.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +55,9 @@ public class ProductService {
                 return new ElasticHit<ProductModel>(response.id(), response.index(), response.source());
         }
 
+        /*
+         * search product
+         */
         public List<ElasticHit<ProductModel>> searchProduct(String field, String value) throws IOException {
                 SearchResponse<ProductModel> response = this.client.search(search -> search
                                 .index(this.products)
@@ -72,6 +74,9 @@ public class ProductService {
                                 .collect(Collectors.toList());
         }
 
+        /*
+         * create product
+         */
         public ElasticHit<ProductModel> createProduct(ProductModel product) throws IOException {
                 String id = UUID.randomUUID().toString();
 
@@ -83,7 +88,10 @@ public class ProductService {
                 return this.getProductByid(id);
         }
 
-        public List<ElasticHit<ProductModel>> updateProduct(ProductModel product, String id) throws IOException {
+        /*
+         * update product
+         */
+        public ElasticHit<ProductModel> updateProduct(ProductModel product, String id) throws IOException {
                 ElasticHit<ProductModel> hit = this.getProductByid(id);
 
                 hit.source().setTitle(product.getTitle());
@@ -102,9 +110,12 @@ public class ProductService {
                                                 .refresh(Refresh.True),
                                 ProductModel.class);
 
-                return new ArrayList<>(List.of(hit));
+                return hit;
         }
 
+        /*
+         * delete product
+         */
         public List<ElasticHit<ProductModel>> deleteProduct(String id) throws IOException {
                 GetResponse<ProductModel> response = this.client.get(
                                 get -> get.index(this.products).id(id),

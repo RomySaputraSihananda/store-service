@@ -82,7 +82,7 @@ public class ProductController {
          */
         @PutMapping("/{id}")
         @Operation(summary = "Update product", description = "API for update product")
-        public ResponseEntity<BodyResponse<List<ElasticHit<ProductModel>>>> updateData(
+        public ResponseEntity<BodyResponse<ElasticHit<ProductModel>>> updateData(
                         @PathVariable String id,
                         @RequestBody(required = true) ProductModel product)
                         throws IOException {
