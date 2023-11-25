@@ -24,46 +24,46 @@ The following is a list of available Request URIs:
 
 - **Swagger Documentation** ( no need authentication )
 
-  - | URL                            | Method | Information           |
-    | :----------------------------- | :----: | :-------------------- |
-    | [/docs](http://localhost/docs) |  GET   | Swagger Documentation |
+  - | URL                                 | Method | Information           |
+    | :---------------------------------- | :----: | :-------------------- |
+    | [/docs](http://localhost:4444/docs) |  GET   | Swagger Documentation |
 
 - **Auth Controller** ( no need authentication )
 
-  - | URL                                                        | Method | Information             |
-    | :--------------------------------------------------------- | :----: | :---------------------- |
-    | [/api/v1/auth/signin](http://localhost/api/v1/auth/signin) |  POST  | API for Signin user     |
-    | [/api/v1/auth/signup](http://localhost/api/v1/auth/signup) |  POST  | API for Signup new user |
+  - | URL                                                             | Method | Information             |
+    | :-------------------------------------------------------------- | :----: | :---------------------- |
+    | [/api/v1/auth/signin](http://localhost:4444/api/v1/auth/signin) |  POST  | API for Signin user     |
+    | [/api/v1/auth/signup](http://localhost:4444/api/v1/auth/signup) |  POST  | API for Signup new user |
 
 - **Product Controller** ( for **USER** authentication only )
 
-  - | URL                                                            | Method | Information                  |
-    | :------------------------------------------------------------- | :----: | :--------------------------- |
-    | [/api/v1/product](http:localhost:444/api/v1/product)           |  GET   | API for get all products     |
-    | [/api/v1/product/{id}](http:localhost:444/api/v1/product/{id}) |  GET   | API for get product by id    |
-    | [/api/v1/product](http:localhost:444/api/v1/product)           |  POST  | API for create new product   |
-    | [/api/v1/product/{id}](http:localhost:444/api/v1/product/{id}) |  PUT   | API for update product       |
-    | [/api/v1/product/search](http:localhost:444/api/v1/product)    |  GET   | API for get product by field |
+  - | URL                                                             | Method | Information                  |
+    | :-------------------------------------------------------------- | :----: | :--------------------------- |
+    | [/api/v1/product](http:localhost:4444/api/v1/product)           |  GET   | API for get all products     |
+    | [/api/v1/product/{id}](http:localhost:4444/api/v1/product/{id}) |  GET   | API for get product by id    |
+    | [/api/v1/product](http:localhost:4444/api/v1/product)           |  POST  | API for create new product   |
+    | [/api/v1/product/{id}](http:localhost:4444/api/v1/product/{id}) |  PUT   | API for update product       |
+    | [/api/v1/product/search](http:localhost:4444/api/v1/product)    |  GET   | API for get product by field |
 
 - **User Controller** ( for **USER** authentication only )
 
-  - | URL                                                      | Method | Information              |
-    | :------------------------------------------------------- | :----: | :----------------------- |
-    | [/api/v1/user](http:localhost:444/api/v1/user)           |  GET   | API for get self info    |
-    | [/api/v1/user](http:localhost:444/api/v1/user)           |  POST  | API for Reset Password   |
-    | [/api/v1/user](http:localhost:444/api/v1/user)           |  PUT   | API for update self info |
-    | [/api/v1/user/logs](http:localhost:444/api/v1/user/logs) |  GET   | API for get self logs    |
+  - | URL                                                       | Method | Information              |
+    | :-------------------------------------------------------- | :----: | :----------------------- |
+    | [/api/v1/user](http:localhost:4444/api/v1/user)           |  GET   | API for get self info    |
+    | [/api/v1/user](http:localhost:4444/api/v1/user)           |  POST  | API for Reset Password   |
+    | [/api/v1/user](http:localhost:4444/api/v1/user)           |  PUT   | API for update self info |
+    | [/api/v1/user/logs](http:localhost:4444/api/v1/user/logs) |  GET   | API for get self logs    |
 
 - **Admin Controller** ( for **ADMIN** authentication only )
-  - | URL                                                                  | Method | Information                  |
-    | :------------------------------------------------------------------- | :----: | :--------------------------- |
-    | [/api/v1/admin](http:localhost:444/api/v1/admin)                     |  GET   | API for get all users        |
-    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           |  GET   | API for get student by id    |
-    | [/api/v1/admin](http:localhost:444/api/v1/admin)                     |  POST  | API for create new user      |
-    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           |  PUT   | API for update user          |
-    | [/api/v1/admin/{id}](http:localhost:444/api/v1/admin/{id})           | DELETE | API for delete user          |
-    | [/api/v1/admin/logs/{id}](http:localhost:444/api/v1/admin/logs/{id}) |  GET   | API for get user log         |
-    | [/api/v1/admin/search](http:localhost:444/api/v1/admin/search)       |  GET   | API for get user by username |
+  - | URL                                                                   | Method | Information                  |
+    | :-------------------------------------------------------------------- | :----: | :--------------------------- |
+    | [/api/v1/admin](http:localhost:4444/api/v1/admin)                     |  GET   | API for get all users        |
+    | [/api/v1/admin/{id}](http:localhost:4444/api/v1/admin/{id})           |  GET   | API for get student by id    |
+    | [/api/v1/admin](http:localhost:4444/api/v1/admin)                     |  POST  | API for create new user      |
+    | [/api/v1/admin/{id}](http:localhost:4444/api/v1/admin/{id})           |  PUT   | API for update user          |
+    | [/api/v1/admin/{id}](http:localhost:4444/api/v1/admin/{id})           | DELETE | API for delete user          |
+    | [/api/v1/admin/logs/{id}](http:localhost:4444/api/v1/admin/logs/{id}) |  GET   | API for get user log         |
+    | [/api/v1/admin/search](http:localhost:4444/api/v1/admin/search)       |  GET   | API for get user by username |
 
 ## Licence
 
