@@ -18,6 +18,7 @@ import com.romys.models.UserModel;
 import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDTO;
 import com.romys.DTOs.UserDetailDTO;
+import com.romys.exceptions.CostException;
 import com.romys.exceptions.PasswordNotMatchException;
 import com.romys.exceptions.UserNotFoundException;
 import com.romys.payloads.hit.ElasticHit;
@@ -42,12 +43,18 @@ public class UserService {
         @Value("${service.elastic.index.users}")
         private String index;
 
+        @Value("${service.security.password.cost}")
+        private int cost;
+
         /*
          * create user
          */
         public ElasticHit<UserModel> createUser(UserDTO user) throws IOException {
                 if (this.usernameIsExists(user.getUsername()))
                         throw new UserNotFoundException("username already Exists");
+
+                if (user.getPassword().length() < 8)
+                        throw new CostException("Password length must be 8 or more");
 
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
