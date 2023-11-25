@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @NoArgsConstructor
-public class ProductException extends RuntimeException {
-    public ProductException(String message) {
+public class ProductNotFoundException extends RuntimeException {
+    public ProductNotFoundException(String message) {
         super(message);
     }
 }

@@ -19,8 +19,7 @@ import com.romys.DTOs.PasswordDTO;
 import com.romys.DTOs.UserDTO;
 import com.romys.DTOs.UserDetailDTO;
 import com.romys.exceptions.PasswordNotMatchException;
-import com.romys.exceptions.ProductException;
-import com.romys.exceptions.UserException;
+import com.romys.exceptions.UserNotFoundException;
 import com.romys.payloads.hit.ElasticHit;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
@@ -46,9 +45,9 @@ public class UserService {
         /*
          * create user
          */
-        public List<ElasticHit<UserModel>> createUser(UserDTO user) throws IOException {
+        public ElasticHit<UserModel> createUser(UserDTO user) throws IOException {
                 if (this.usernameIsExists(user.getUsername()))
-                        throw new UserException("username already Exists");
+                        throw new UserNotFoundException("username already Exists");
 
                 String id = UUID.randomUUID().toString();
                 user.setPassword(this.passwordEncoder.encode(user.getPassword()));
@@ -76,16 +75,15 @@ public class UserService {
         /*
          * get user by id
          */
-        public List<ElasticHit<UserModel>> getUserByid(String id) throws IOException {
+        public ElasticHit<UserModel> getUserByid(String id) throws IOException {
                 GetResponse<UserModel> response = this.client.get(
                                 get -> get.index(this.index).id(id),
                                 UserModel.class);
 
                 if (!response.found())
-                        throw new ProductException("user not found");
+                        throw new UserNotFoundException("user not found");
 
-                return List
-                                .of(new ElasticHit<UserModel>(response.id(), response.index(), response.source()));
+                return new ElasticHit<UserModel>(response.id(), response.index(), response.source());
 
         }
 
@@ -157,7 +155,7 @@ public class UserService {
         private boolean usernameIsExists(String username) throws IOException {
                 try {
                         return this.getUserByUsername(username).source().getUsername().equals(username);
-                } catch (UsernameNotFoundException | UserException e) {
+                } catch (UsernameNotFoundException | UserNotFoundException e) {
                         return false;
                 }
 
@@ -178,7 +176,7 @@ public class UserService {
                         HitsMetadata<UserModel> meta = response.hits();
                         TotalHits total = meta.total();
                         if (!(total != null && total.value() >= 1))
-                                throw new UserException("not found");
+                                throw new UserNotFoundException("not found");
 
                         List<Hit<UserModel>> hits = meta.hits();
                         Hit<UserModel> hit = hits.get(0);

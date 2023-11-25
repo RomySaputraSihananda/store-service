@@ -1,7 +1,6 @@
 package com.romys.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.naming.AuthenticationException;
 
@@ -21,7 +20,6 @@ import com.romys.DTOs.UserDTO;
 import com.romys.models.UserModel;
 import com.romys.payloads.hit.ElasticHit;
 import com.romys.payloads.responses.BodyResponse;
-import com.romys.payloads.responses.BodyResponses;
 import com.romys.payloads.responses.TokenResponse;
 import com.romys.services.JwtService;
 import com.romys.services.UserService;
@@ -76,12 +74,12 @@ public class AuthController {
          */
         @PostMapping("/signup")
         @Operation(summary = "Signup new user", description = "API for Signup new user")
-        public ResponseEntity<BodyResponses<ElasticHit<UserModel>>> signup(
+        public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> signup(
                         @RequestBody(required = true) UserDTO user) throws IOException {
-                List<ElasticHit<UserModel>> response = this.service.createUser(user);
+                ElasticHit<UserModel> response = this.service.createUser(user);
 
                 return new ResponseEntity<>(
-                                new BodyResponses<>(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(),
+                                new BodyResponse<>(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(),
                                                 String.format("new user success created"), response),
                                 HttpStatus.CREATED);
         }
