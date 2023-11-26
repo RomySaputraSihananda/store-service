@@ -16,7 +16,6 @@ import com.romys.payloads.hit.ElasticHit;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.HitsMetadata;
 import co.elastic.clients.elasticsearch.core.search.TotalHits;
 
@@ -55,17 +54,11 @@ public class LogService {
 
             HitsMetadata<LogModel> meta = response.hits();
             TotalHits total = meta.total();
+
             if (!(total != null && total.value() >= 1))
                 throw new UserNotFoundException("not found");
 
-            List<Hit<LogModel>> hits = meta.hits();
-            // Hit<LogModel> hit = hits.get(0);
-            // return new ElasticHit<LogModel>(
-            // hit.id(),
-            // hit.index(),
-            // hit.source());
-
-            return hits.stream().map(hit -> new ElasticHit<LogModel>(hit.id(), hit.index(), hit.source()))
+            return meta.hits().stream().map(hit -> new ElasticHit<LogModel>(hit.id(), hit.index(), hit.source()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw e;
