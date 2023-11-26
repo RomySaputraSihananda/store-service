@@ -40,8 +40,11 @@ public class UserController {
         @Autowired
         private JwtService jwtService;
 
+        /*
+         * get self info
+         */
         @GetMapping
-        @Operation(summary = "Get info self", description = "API for get info self")
+        @Operation(summary = "Get self info", description = "API for get self info")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> getInfo(HttpServletRequest request)
                         throws IOException {
                 ElasticHit<UserModel> user = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
@@ -53,8 +56,11 @@ public class UserController {
                                 HttpStatus.OK);
         }
 
+        /*
+         * Update self info
+         */
         @PutMapping
-        @Operation(summary = "Update info self", description = "API for update info self")
+        @Operation(summary = "Update self info", description = "API for update self")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> updateInfo(@RequestBody UserDetailDTO userDetail,
                         HttpServletRequest request) throws IOException {
                 ElasticHit<UserModel> hit = this.jwtService.getUser(request.getHeader(HttpHeaders.AUTHORIZATION));
@@ -68,6 +74,9 @@ public class UserController {
                                 HttpStatus.OK);
         }
 
+        /*
+         * Reset Password
+         */
         @PostMapping
         @Operation(summary = "Reset Password", description = "API for Reset Password")
         public ResponseEntity<BodyResponse<ElasticHit<UserModel>>> resetPassword(@RequestBody PasswordDTO password,
@@ -84,8 +93,11 @@ public class UserController {
                                 HttpStatus.OK);
         }
 
+        /*
+         * cek self logs
+         */
         @GetMapping("/logs")
-        @Operation(summary = "Get Log", description = "API for get Log")
+        @Operation(summary = "Get self Log", description = "API for get self Log")
         public ResponseEntity<BodyResponse<List<ElasticHit<LogModel>>>> getLogs(
                         HttpServletRequest request) throws IOException {
 

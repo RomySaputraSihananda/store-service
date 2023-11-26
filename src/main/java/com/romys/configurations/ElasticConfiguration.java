@@ -19,9 +19,6 @@ public class ElasticConfiguration {
         @Value("${service.elastic.host}")
         private String host;
 
-        @Value("${service.elastic.cluster.uuid}")
-        private String uuid;
-
         @Bean
         public ElasticsearchClient esClient() {
                 RestClient restClient = RestClient.builder(HttpHost.create(this.host)).build();

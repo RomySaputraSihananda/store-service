@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 @RequestMapping("/api")
 public class ExceptionController {
+    /*
+     * controller for handle exception
+     */
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<BodyResponse<ExceptionResponse>> common(Throwable exception, HttpServletRequest request) {
         HttpStatus status = exception.getClass().getAnnotation(ResponseStatus.class).value();
